@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex" />
+    <title>QA — Visionneuse PDF (outil de développement)</title>
+    <style>
+      body {
+        margin: 0;
+        background: #6b6f7a;
+        font-family: system-ui, sans-serif;
+      }
+      #pages {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 12px;
+        justify-content: center;
+      }
+      canvas {
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+      #info {
+        color: #fff;
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      Outil de contrôle qualité (non publié) : affiche les pages d'un PDF généré.
+      Usage : /qa/pdf-viewer.html?file=/test-results/pdf/minimal-portrait.pdf&scale=1&pages=1,2
+    -->
+    <div id="info">Chargement…</div>
+    <div id="pages"></div>
+    <script type="module">
+      import * as pdfjs from '/node_modules/pdfjs-dist/build/pdf.mjs';
+      pdfjs.GlobalWorkerOptions.workerSrc = '/node_modules/pdfjs-dist/build/pdf.worker.mjs';
+      const params = new URLSearchParams(location.search);
+      const file = params.get('file');
+      const scale = Number(params.get('scale') || '1');
+      const only = params.get('pages')?.split(',').map(Number);
+      const clip = params.get('clip')?.split(',').map(Number); // x,y,w,h en points
+      const info = document.getElementById('info');
+      try {
+        const pdf = await pdfjs.getDocument({ url: file }).promise;
+        const meta = await pdf.getMetadata();
+        info.textContent = `${file} — ${pdf.numPages} page(s) — titre : ${meta.info?.Title ?? '?'}`;
+        for (let i = 1; i <= pdf.numPages; i++) {
+          if (only && !only.includes(i)) continue;
+          const page = await pdf.getPage(i);
+          const viewport = page.getViewport({ scale });
+          const canvas = document.createElement('canvas');
+          const ratio = window.devicePixelRatio || 1;
+          let w = viewport.width;
+          let h = viewport.height;
+          let transform = [ratio, 0, 0, ratio, 0, 0];
+          if (clip) {
+            w = clip[2] * scale;
+            h = clip[3] * scale;
+            transform = [ratio, 0, 0, ratio, -clip[0] * scale * ratio, -clip[1] * scale * ratio];
+          }
+          canvas.width = Math.floor(w * ratio);
+          canvas.height = Math.floor(h * ratio);
+          canvas.style.width = `${w}px`;
+          canvas.style.height = `${h}px`;
+          document.getElementById('pages').appendChild(canvas);
+          await page.render({ canvasContext: canvas.getContext('2d'), viewport, transform }).promise;
+        }
+        document.body.dataset.ready = 'true';
+      } catch (e) {
+        info.textContent = `Erreur : ${e.message}`;
+        document.body.dataset.ready = 'error';
+      }
+    </script>
+  </body>
+</html>
