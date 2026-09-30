@@ -1,0 +1,8 @@
+dist
+dist-ssr
+node_modules
+package-lock.json
+src/pdf/fontMetrics.ts
+marketing/**/*.pdf
+test-results
+playwright-report

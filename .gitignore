@@ -1,0 +1,32 @@
+# Dépendances
+node_modules/
+
+# Builds
+dist/
+dist-ssr/
+*.tsbuildinfo
+
+# Tests
+test-results/
+playwright-report/
+coverage/
+.tmp/
+
+# Environnement : ne jamais versionner de vrais fichiers .env
+.env
+.env.*
+!.env.example
+
+# Journaux
+*.log
+npm-debug.log*
+
+# Système / éditeurs
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Outils locaux
+.claude/
