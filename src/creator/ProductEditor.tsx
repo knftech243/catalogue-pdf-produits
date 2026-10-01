@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
 import { Dialog } from '../components/Dialog';
 import { Icon } from '../components/Icon';
 import { AVAILABILITY_LABELS, createEmptyProduct, createId, LIMITS } from '../core/defaults';
@@ -27,7 +27,7 @@ interface Draft {
   imageId: string | null;
 }
 
-const toText = (v: number | null) => (v == null ? '' : formatNumber(v).replace(/ /g, ' '));
+const toText = (v: number | null) => (v == null ? '' : formatNumber(v).replace(/\u00A0/g, ' '));
 
 function toDraft(p: Product): Draft {
   return {
@@ -52,15 +52,7 @@ export function ProductEditor({ open, product, onClose, onSaved }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const listId = useId();
-
-  // Réinitialise le brouillon à chaque ouverture.
-  useEffect(() => {
-    if (open) {
-      setDraft(toDraft(product ?? createEmptyProduct()));
-      setSubmitted(false);
-      setPhotoError(null);
-    }
-  }, [open, product]);
+  // Le brouillon est réinitialisé à chaque ouverture : le parent recrée ce composant (clé « key »).
 
   const releasePins = () => {
     for (const id of pinned.current) unpinImage(id);
@@ -73,7 +65,10 @@ export function ProductEditor({ open, product, onClose, onSaved }: Props) {
   };
 
   const categories = useMemo(
-    () => [...new Set(data.products.map((p) => p.category.trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'fr')),
+    () =>
+      [...new Set(data.products.map((p) => p.category.trim()).filter(Boolean))].sort((a, b) =>
+        a.localeCompare(b, 'fr'),
+      ),
     [data.products],
   );
 
@@ -88,7 +83,10 @@ export function ProductEditor({ open, product, onClose, onSaved }: Props) {
       : price == null
         ? 'Prix invalide. Écrivez seulement le nombre, par exemple 12,50 ou 25000.'
         : null,
-    oldPrice: draft.oldPrice.trim() && oldPrice == null ? 'Ancien prix invalide. Exemple : 15 ou 15,90.' : null,
+    oldPrice:
+      draft.oldPrice.trim() && oldPrice == null
+        ? 'Ancien prix invalide. Exemple : 15 ou 15,90.'
+        : null,
   };
   const oldPriceWarning =
     oldPrice != null && price != null && oldPrice <= price
@@ -107,7 +105,11 @@ export function ProductEditor({ open, product, onClose, onSaved }: Props) {
       await addImage({ id, ...processed });
       setDraft((d) => ({ ...d, imageId: id }));
     } catch (e) {
-      setPhotoError(e instanceof ImageImportError ? e.message : 'Impossible d’utiliser cette photo. Essayez une autre photo.');
+      setPhotoError(
+        e instanceof ImageImportError
+          ? e.message
+          : 'Impossible d’utiliser cette photo. Essayez une autre photo.',
+      );
     } finally {
       setBusy(false);
       if (fileRef.current) fileRef.current.value = '';
@@ -117,7 +119,11 @@ export function ProductEditor({ open, product, onClose, onSaved }: Props) {
   const save = (addAnother: boolean) => {
     setSubmitted(true);
     if (errors.name || errors.price || errors.oldPrice) {
-      const first = errors.name ? 'product-name' : errors.price ? 'product-price' : 'product-old-price';
+      const first = errors.name
+        ? 'product-name'
+        : errors.price
+          ? 'product-price'
+          : 'product-old-price';
       document.getElementById(first)?.focus();
       return;
     }
@@ -165,11 +171,21 @@ export function ProductEditor({ open, product, onClose, onSaved }: Props) {
             Annuler
           </button>
           {isNew && (
-            <button type="button" className="btn" onClick={() => save(true)} disabled={busy || atLimit}>
+            <button
+              type="button"
+              className="btn"
+              onClick={() => save(true)}
+              disabled={busy || atLimit}
+            >
               Enregistrer et ajouter un autre
             </button>
           )}
-          <button type="button" className="btn btn-dark" onClick={() => save(false)} disabled={busy || atLimit}>
+          <button
+            type="button"
+            className="btn btn-dark"
+            onClick={() => save(false)}
+            disabled={busy || atLimit}
+          >
             <Icon name="check" /> Enregistrer
           </button>
         </>
@@ -186,7 +202,10 @@ export function ProductEditor({ open, product, onClose, onSaved }: Props) {
         <div className="photo-field">
           <div className={`photo-preview${image ? ' has-image' : ''}`}>
             {image ? (
-              <img src={image.thumbUrl} alt={`Photo de ${draft.name || 'ce produit'}`} />
+              <img
+                src={image.thumbUrl}
+                alt={draft.name ? `Produit : ${draft.name}` : 'Produit sans nom'}
+              />
             ) : (
               <div className="photo-empty">
                 <Icon name="camera" size={34} />
@@ -209,8 +228,14 @@ export function ProductEditor({ open, product, onClose, onSaved }: Props) {
               aria-label="Choisir une photo du produit"
               onChange={(e) => onPhoto(e.target.files?.[0])}
             />
-            <button type="button" className="btn btn-sm" onClick={() => fileRef.current?.click()} disabled={busy}>
-              <Icon name={image ? 'refresh' : 'camera'} /> {image ? 'Changer la photo' : 'Ajouter une photo'}
+            <button
+              type="button"
+              className="btn btn-sm"
+              onClick={() => fileRef.current?.click()}
+              disabled={busy}
+            >
+              <Icon name={image ? 'refresh' : 'camera'} />{' '}
+              {image ? 'Changer la photo' : 'Ajouter une photo'}
             </button>
             {image && (
               <button
@@ -222,7 +247,9 @@ export function ProductEditor({ open, product, onClose, onSaved }: Props) {
                 <Icon name="trash" /> Retirer
               </button>
             )}
-            <p className="field-hint">JPEG, PNG ou WebP. Les photos lourdes sont réduites automatiquement.</p>
+            <p className="field-hint">
+              JPEG, PNG ou WebP. Les photos lourdes sont réduites automatiquement.
+            </p>
             {photoError && (
               <p className="field-error" role="alert">
                 <Icon name="alert" size={16} /> {photoError}
@@ -319,7 +346,8 @@ export function ProductEditor({ open, product, onClose, onSaved }: Props) {
         </div>
         {atLimit && (
           <p className="notice notice-warning">
-            <Icon name="alert" /> Vous avez atteint le maximum de {LIMITS.maxProductsInEditor} produits.
+            <Icon name="alert" /> Vous avez atteint le maximum de {LIMITS.maxProductsInEditor}{' '}
+            produits.
           </p>
         )}
         <button type="submit" hidden aria-hidden="true" tabIndex={-1} />

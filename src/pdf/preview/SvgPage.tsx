@@ -128,7 +128,15 @@ function renderOp(op: DrawOp, key: string, resolveImage: SvgPageProps['resolveIm
   }
 }
 
-function SvgPageInner({ page, width, height, resolveImage, idPrefix, label, className }: SvgPageProps) {
+function SvgPageInner({
+  page,
+  width,
+  height,
+  resolveImage,
+  idPrefix,
+  label,
+  className,
+}: SvgPageProps) {
   return (
     <svg
       className={className}

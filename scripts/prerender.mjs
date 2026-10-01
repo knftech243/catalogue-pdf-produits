@@ -24,11 +24,13 @@ const { render, routes, siteUrl } = await import(pathToFileURL(ssrEntry).href);
 
 function page(path) {
   const { html, head } = render(path);
-  return template
-    .replace(/<!--head-start-->[\s\S]*?<!--head-end-->/, head)
-    // data-route : le navigateur vérifie que ce HTML correspond bien à l'adresse avant de l'hydrater.
-    .replace('<div id="root">', `<div id="root" data-route="${path}">`)
-    .replace('<!--app-html-->', html);
+  return (
+    template
+      .replace(/<!--head-start-->[\s\S]*?<!--head-end-->/, head)
+      // data-route : le navigateur vérifie que ce HTML correspond bien à l'adresse avant de l'hydrater.
+      .replace('<div id="root">', `<div id="root" data-route="${path}">`)
+      .replace('<!--app-html-->', html)
+  );
 }
 
 function write(file, content) {
@@ -38,7 +40,8 @@ function write(file, content) {
 
 let count = 0;
 for (const route of routes) {
-  const target = route.path === '/' ? join(dist, 'index.html') : join(dist, route.path.slice(1), 'index.html');
+  const target =
+    route.path === '/' ? join(dist, 'index.html') : join(dist, route.path.slice(1), 'index.html');
   write(target, page(route.path));
   count++;
 }
@@ -67,6 +70,8 @@ write(
 rmSync(join(root, 'dist-ssr'), { recursive: true, force: true });
 
 if (siteUrl.includes('example.com')) {
-  console.warn('⚠ VITE_SITE_URL n’est pas défini : sitemap et URL canoniques utilisent https://www.example.com.');
+  console.warn(
+    '⚠ VITE_SITE_URL n’est pas défini : sitemap et URL canoniques utilisent https://www.example.com.',
+  );
 }
 console.log(`Pré-rendu terminé : ${count} pages + 404.html, sitemap.xml, robots.txt.`);

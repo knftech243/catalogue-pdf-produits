@@ -43,8 +43,9 @@ export function TemplatesPage() {
           <p className="eyebrow">Modèles</p>
           <h1>Quatre modèles de catalogues, quatre styles</h1>
           <p className="lead">
-            Chaque modèle a sa propre couverture, sa grille de produits, sa façon d’afficher le prix et son pied de page
-            avec vos coordonnées. Tous existent en A4 portrait et paysage, avec la couleur de votre choix.
+            Chaque modèle a sa propre couverture, sa grille de produits, sa façon d’afficher le prix
+            et son pied de page avec vos coordonnées. Tous existent en A4 portrait et paysage, avec
+            la couleur de votre choix.
           </p>
         </div>
       </section>
@@ -61,12 +62,16 @@ export function TemplatesPage() {
                     <li key={d}>{d}</li>
                   ))}
                   <li>
-                    {productsPerPage(t.id, 'portrait', 'large')} à {productsPerPage(t.id, 'portrait', 'small')} produits par
-                    page en portrait
+                    {productsPerPage(t.id, 'portrait', 'large')} à{' '}
+                    {productsPerPage(t.id, 'portrait', 'small')} produits par page en portrait
                   </li>
                 </ul>
                 <p>
-                  <span className="swatch" style={{ background: t.recommendedColor }} aria-hidden="true" />
+                  <span
+                    className="swatch"
+                    style={{ background: t.recommendedColor }}
+                    aria-hidden="true"
+                  />
                   Idéal pour : {t.idealFor.join(', ')}
                 </p>
                 <Link to="/creer" className="btn btn-dark">

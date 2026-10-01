@@ -8,7 +8,9 @@ export function FaqPage() {
         <div className="container narrow">
           <p className="eyebrow">FAQ</p>
           <h1>Questions fréquentes</h1>
-          <p className="lead">Tout ce qu’il faut savoir pour créer et partager votre catalogue PDF.</p>
+          <p className="lead">
+            Tout ce qu’il faut savoir pour créer et partager votre catalogue PDF.
+          </p>
         </div>
       </section>
       <section className="section" style={{ paddingTop: 16 }}>

@@ -63,7 +63,10 @@ export function sanitizeCatalog(raw: unknown): CatalogData | null {
   const shop = { ...createEmptyShop(), ...(obj.shop ?? {}) };
   const products: Product[] = Array.isArray(obj.products)
     ? obj.products
-        .filter((p): p is Product => !!p && typeof p === 'object' && typeof (p as Product).id === 'string')
+        .filter(
+          (p): p is Product =>
+            !!p && typeof p === 'object' && typeof (p as Product).id === 'string',
+        )
         .map((p) => ({
           id: p.id,
           name: str(p.name),
@@ -72,7 +75,9 @@ export function sanitizeCatalog(raw: unknown): CatalogData | null {
           description: str(p.description),
           category: str(p.category),
           reference: str(p.reference),
-          availability: ['in_stock', 'limited', 'on_order', 'sold_out'].includes(p.availability) ? p.availability : '',
+          availability: ['in_stock', 'limited', 'on_order', 'sold_out'].includes(p.availability)
+            ? p.availability
+            : '',
           imageId: typeof p.imageId === 'string' ? p.imageId : null,
         }))
     : [];
@@ -138,7 +143,10 @@ function openDb(): Promise<IDBDatabase> {
   return dbPromise;
 }
 
-function tx<T>(mode: IDBTransactionMode, run: (store: IDBObjectStore) => IDBRequest<T> | void): Promise<T | void> {
+function tx<T>(
+  mode: IDBTransactionMode,
+  run: (store: IDBObjectStore) => IDBRequest<T> | void,
+): Promise<T | void> {
   return openDb().then(
     (db) =>
       new Promise<T | void>((resolve, reject) => {
@@ -172,7 +180,9 @@ export async function deleteImage(id: string): Promise<void> {
 export async function loadImages(): Promise<StoredImage[]> {
   try {
     const all = await tx<StoredImage[]>('readonly', (s) => s.getAll());
-    return Array.isArray(all) ? all.filter((i) => i && i.blob instanceof Blob && i.thumb instanceof Blob) : [];
+    return Array.isArray(all)
+      ? all.filter((i) => i && i.blob instanceof Blob && i.thumb instanceof Blob)
+      : [];
   } catch {
     return [];
   }

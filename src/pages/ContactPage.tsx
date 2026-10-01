@@ -3,7 +3,13 @@ import { Icon } from '../components/Icon';
 import { SITE } from '../config/site';
 import { Link } from '../router/router';
 
-const SUBJECTS = ['Question sur l’outil', 'Signaler un problème', 'Offre Premium', 'Partenariat', 'Autre'];
+const SUBJECTS = [
+  'Question sur l’outil',
+  'Signaler un problème',
+  'Offre Premium',
+  'Partenariat',
+  'Autre',
+];
 
 export function ContactPage() {
   const [subject, setSubject] = useState(SUBJECTS[0]);
@@ -29,7 +35,9 @@ export function ContactPage() {
         <div className="container narrow">
           <p className="eyebrow">Contact</p>
           <h1>Nous contacter</h1>
-          <p className="lead">Une question, une idée d’amélioration ou un problème ? Écrivez-nous.</p>
+          <p className="lead">
+            Une question, une idée d’amélioration ou un problème ? Écrivez-nous.
+          </p>
         </div>
       </section>
       <section className="section" style={{ paddingTop: 16 }}>
@@ -73,7 +81,8 @@ export function ContactPage() {
                 disabled={!configured}
               />
               <p className="field-hint" id="contact-hint">
-                N’indiquez jamais de mot de passe, de code ou d’informations bancaires dans un message.
+                N’indiquez jamais de mot de passe, de code ou d’informations bancaires dans un
+                message.
               </p>
               {error && (
                 <p className="field-error" id="contact-error">
@@ -85,20 +94,25 @@ export function ContactPage() {
               <Icon name="mail" /> Ouvrir mon application e-mail
             </button>
             <p className="field-hint">
-              Ce formulaire n’envoie rien lui-même : il prépare un e-mail dans votre application de messagerie.
+              Ce formulaire n’envoie rien lui-même : il prépare un e-mail dans votre application de
+              messagerie.
             </p>
           </form>
           <aside className="card">
             <h2 className="h3">Avant d’écrire</h2>
-            <p>La plupart des réponses se trouvent dans la <Link to="/faq">foire aux questions</Link>.</p>
+            <p>
+              La plupart des réponses se trouvent dans la <Link to="/faq">foire aux questions</Link>
+              .
+            </p>
             {configured && (
               <p>
                 E-mail : <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>
               </p>
             )}
             <p className="small-note">
-              <Icon name="shield" size={18} /> Vos photos et vos catalogues restent sur votre appareil : nous n’y avons
-              pas accès. Pour un problème, décrivez-le ou joignez une capture d’écran.
+              <Icon name="shield" size={18} /> Vos photos et vos catalogues restent sur votre
+              appareil : nous n’y avons pas accès. Pour un problème, décrivez-le ou joignez une
+              capture d’écran.
             </p>
           </aside>
         </div>

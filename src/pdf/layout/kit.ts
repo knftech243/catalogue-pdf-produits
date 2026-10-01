@@ -82,7 +82,12 @@ export function paragraph(
 }
 
 /** Nombre de lignes qu'occupera un texte (sans dessiner). */
-export function countLines(text: string, style: TextStyle, width: number, maxLines: number): number {
+export function countLines(
+  text: string,
+  style: TextStyle,
+  width: number,
+  maxLines: number,
+): number {
   if (!text.trim()) return 0;
   return wrapText(text, style.font, style.size, width, { maxLines, charSpace: style.charSpace })
     .lines.length;
@@ -110,9 +115,23 @@ export function palette(primary: string, pageBg = '#FFFFFF') {
 export type Palette = ReturnType<typeof palette>;
 
 /** Emplacement de photo vide : pictogramme discret + « Photo à venir ». */
-export function placeholder(ops: DrawOp[], box: Box, bg: string, fg: string, r = 0, circle = false) {
+export function placeholder(
+  ops: DrawOp[],
+  box: Box,
+  bg: string,
+  fg: string,
+  r = 0,
+  circle = false,
+) {
   if (circle) {
-    ops.push({ kind: 'ellipse', cx: box.x + box.w / 2, cy: box.y + box.h / 2, rx: box.w / 2, ry: box.h / 2, fill: bg });
+    ops.push({
+      kind: 'ellipse',
+      cx: box.x + box.w / 2,
+      cy: box.y + box.h / 2,
+      rx: box.w / 2,
+      ry: box.h / 2,
+      fill: bg,
+    });
   } else {
     ops.push({ kind: 'rect', x: box.x, y: box.y, w: box.w, h: box.h, fill: bg, r });
   }
@@ -122,12 +141,52 @@ export function placeholder(ops: DrawOp[], box: Box, bg: string, fg: string, r =
   const cy = box.y + box.h / 2 - (box.h > 70 ? 6 : 0);
   const iw = s;
   const ih = s * 0.75;
-  ops.push({ kind: 'rect', x: cx - iw / 2, y: cy - ih / 2, w: iw, h: ih, stroke: fg, lineWidth: 1.2, r: 2 });
-  ops.push({ kind: 'ellipse', cx: cx + iw * 0.2, cy: cy - ih * 0.18, rx: iw * 0.08, ry: iw * 0.08, fill: fg });
-  ops.push({ kind: 'line', x1: cx - iw / 2 + 2, y1: cy + ih / 2 - 3, x2: cx - iw * 0.1, y2: cy, color: fg, width: 1.2 });
-  ops.push({ kind: 'line', x1: cx - iw * 0.1, y1: cy, x2: cx + iw / 2 - 2, y2: cy + ih / 2 - 3, color: fg, width: 1.2 });
+  ops.push({
+    kind: 'rect',
+    x: cx - iw / 2,
+    y: cy - ih / 2,
+    w: iw,
+    h: ih,
+    stroke: fg,
+    lineWidth: 1.2,
+    r: 2,
+  });
+  ops.push({
+    kind: 'ellipse',
+    cx: cx + iw * 0.2,
+    cy: cy - ih * 0.18,
+    rx: iw * 0.08,
+    ry: iw * 0.08,
+    fill: fg,
+  });
+  ops.push({
+    kind: 'line',
+    x1: cx - iw / 2 + 2,
+    y1: cy + ih / 2 - 3,
+    x2: cx - iw * 0.1,
+    y2: cy,
+    color: fg,
+    width: 1.2,
+  });
+  ops.push({
+    kind: 'line',
+    x1: cx - iw * 0.1,
+    y1: cy,
+    x2: cx + iw / 2 - 2,
+    y2: cy + ih / 2 - 3,
+    color: fg,
+    width: 1.2,
+  });
   if (box.h > 70 && box.w > 60) {
-    line(ops, 'Photo à venir', box.x, cy + ih / 2 + 12, box.w, { font: 'helvetica', size: 7.5, color: fg }, 'center');
+    line(
+      ops,
+      'Photo à venir',
+      box.x,
+      cy + ih / 2 + 12,
+      box.w,
+      { font: 'helvetica', size: 7.5, color: fg },
+      'center',
+    );
   }
 }
 
@@ -163,20 +222,47 @@ export interface PriceTexts {
 export function priceTexts(product: Product, input: LayoutInput): PriceTexts {
   const currency = input.shop.currency;
   const price = product.price != null ? pdfText(formatPrice(product.price, currency)) : '';
-  const showOld = input.settings.showOldPrice && product.oldPrice != null && product.price != null && product.oldPrice > product.price;
+  const showOld =
+    input.settings.showOldPrice &&
+    product.oldPrice != null &&
+    product.price != null &&
+    product.oldPrice > product.price;
   const pct = showOld ? discountPercent(product.price, product.oldPrice) : null;
   return {
     price,
-    oldPrice: showOld && product.oldPrice != null ? pdfText(formatPrice(product.oldPrice, currency)) : null,
-    discount: pct != null ? `-${pct} %` : null,
+    oldPrice:
+      showOld && product.oldPrice != null ? pdfText(formatPrice(product.oldPrice, currency)) : null,
+    discount: pct != null ? `-${pct}\u00A0%` : null,
   };
 }
 
 /** Prix barré : texte + trait horizontal. Retourne la largeur. */
-export function struckText(ops: DrawOp[], text: string, x: number, baseline: number, style: TextStyle): number {
+export function struckText(
+  ops: DrawOp[],
+  text: string,
+  x: number,
+  baseline: number,
+  style: TextStyle,
+): number {
   const w = measureText(text, style.font, style.size);
-  ops.push({ kind: 'text', x, y: baseline, text, font: style.font, size: style.size, color: style.color });
-  ops.push({ kind: 'line', x1: x - 0.5, y1: baseline - style.size * 0.3, x2: x + w + 0.5, y2: baseline - style.size * 0.3, color: style.color, width: Math.max(0.5, style.size * 0.07) });
+  ops.push({
+    kind: 'text',
+    x,
+    y: baseline,
+    text,
+    font: style.font,
+    size: style.size,
+    color: style.color,
+  });
+  ops.push({
+    kind: 'line',
+    x1: x - 0.5,
+    y1: baseline - style.size * 0.3,
+    x2: x + w + 0.5,
+    y2: baseline - style.size * 0.3,
+    color: style.color,
+    width: Math.max(0.5, style.size * 0.07),
+  });
   return w;
 }
 
@@ -204,7 +290,15 @@ export function availabilityBadge(
   const w = measureText(label, 'helvetica-bold', size) + padX * 2;
   const bx = align === 'left' ? x : align === 'center' ? x - w / 2 : x - w;
   ops.push({ kind: 'rect', x: bx, y, w, h, fill: mix(color, '#FFFFFF', 0.88), r: h / 2 });
-  ops.push({ kind: 'text', x: bx + padX, y: y + h / 2 + size * 0.35, text: label, font: 'helvetica-bold', size, color });
+  ops.push({
+    kind: 'text',
+    x: bx + padX,
+    y: y + h / 2 + size * 0.35,
+    text: label,
+    font: 'helvetica-bold',
+    size,
+    color,
+  });
   return w;
 }
 
@@ -227,15 +321,33 @@ export function contactItems(input: LayoutInput): ContactItem[] {
   const s = input.shop;
   const items: ContactItem[] = [];
   const wa = input.settings.whatsappLinks ? whatsappLink(s.whatsapp) : null;
-  if (s.whatsapp.trim()) items.push({ key: 'whatsapp', label: 'WhatsApp', value: s.whatsapp.trim(), url: wa });
+  if (s.whatsapp.trim())
+    items.push({ key: 'whatsapp', label: 'WhatsApp', value: s.whatsapp.trim(), url: wa });
   if (s.phone.trim() && s.phone.trim() !== s.whatsapp.trim())
     items.push({ key: 'phone', label: 'Tél.', value: s.phone.trim(), url: null });
-  if (s.email.trim()) items.push({ key: 'email', label: 'E-mail', value: s.email.trim(), url: `mailto:${s.email.trim()}` });
-  if (s.address.trim()) items.push({ key: 'address', label: 'Adresse', value: s.address.trim(), url: null });
+  if (s.email.trim())
+    items.push({
+      key: 'email',
+      label: 'E-mail',
+      value: s.email.trim(),
+      url: `mailto:${s.email.trim()}`,
+    });
+  if (s.address.trim())
+    items.push({ key: 'address', label: 'Adresse', value: s.address.trim(), url: null });
   if (s.instagram.trim())
-    items.push({ key: 'instagram', label: 'Instagram', value: socialLabel(s.instagram), url: socialUrl('instagram', s.instagram) });
+    items.push({
+      key: 'instagram',
+      label: 'Instagram',
+      value: socialLabel(s.instagram),
+      url: socialUrl('instagram', s.instagram),
+    });
   if (s.facebook.trim())
-    items.push({ key: 'facebook', label: 'Facebook', value: socialLabel(s.facebook), url: socialUrl('facebook', s.facebook) });
+    items.push({
+      key: 'facebook',
+      label: 'Facebook',
+      value: socialLabel(s.facebook),
+      url: socialUrl('facebook', s.facebook),
+    });
   return items;
 }
 
@@ -256,9 +368,11 @@ export function contactLine(
   const order = ['whatsapp', 'phone', 'email', 'address', 'instagram', 'facebook'];
   let current = [...items].sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key));
   const minSize = Math.max(6, style.size - 1.5);
-  const format = (it: ContactItem) => (it.key === 'whatsapp' || it.key === 'phone' ? `${it.label} ${it.value}` : it.value);
+  const format = (it: ContactItem) =>
+    it.key === 'whatsapp' || it.key === 'phone' ? `${it.label} ${it.value}` : it.value;
   let size = style.size;
-  const total = (list: ContactItem[], s: number) => measureText(list.map(format).join(separator), style.font, s, style.charSpace);
+  const total = (list: ContactItem[], s: number) =>
+    measureText(list.map(format).join(separator), style.font, s, style.charSpace);
   while (current.length > 0) {
     size = style.size;
     while (size > minSize && total(current, size) > width) size -= 0.5;
@@ -271,12 +385,32 @@ export function contactLine(
   current.forEach((it, i) => {
     const text = format(it);
     const w = measureText(text, style.font, size, style.charSpace);
-    ops.push({ kind: 'text', x: cx, y: baseline, text, font: style.font, size, color: style.color, charSpace: style.charSpace });
-    if (it.url) ops.push({ kind: 'link', x: cx, y: baseline - size, w, h: size * 1.4, url: it.url });
+    ops.push({
+      kind: 'text',
+      x: cx,
+      y: baseline,
+      text,
+      font: style.font,
+      size,
+      color: style.color,
+      charSpace: style.charSpace,
+    });
+    if (it.url)
+      ops.push({ kind: 'link', x: cx, y: baseline - size, w, h: size * 1.4, url: it.url });
     cx += w;
     if (i < current.length - 1) {
       const sw = measureText(separator, style.font, size, style.charSpace);
-      ops.push({ kind: 'text', x: cx, y: baseline, text: separator, font: style.font, size, color: style.color, charSpace: style.charSpace, opacity: 0.6 });
+      ops.push({
+        kind: 'text',
+        x: cx,
+        y: baseline,
+        text: separator,
+        font: style.font,
+        size,
+        color: style.color,
+        charSpace: style.charSpace,
+        opacity: 0.6,
+      });
       cx += sw;
     }
   });
@@ -286,7 +420,9 @@ export function contactLine(
 export function productLink(input: LayoutInput, product: Product): string | null {
   if (!input.settings.whatsappLinks) return null;
   const details = [
-    product.price != null ? formatPrice(product.price, input.shop.currency).replace(/ /g, ' ') : '',
+    product.price != null
+      ? formatPrice(product.price, input.shop.currency).replace(/\u00A0/g, ' ')
+      : '',
     product.reference.trim() ? `réf. ${product.reference.trim()}` : '',
   ].filter(Boolean);
   const suffix = details.length > 0 ? ` (${details.join(', ')})` : '';
@@ -295,7 +431,10 @@ export function productLink(input: LayoutInput, product: Product): string | null
 }
 
 /** Choisit une valeur selon la densité (grands, moyens, petits produits). */
-export function pick<T>(density: 'large' | 'medium' | 'small', values: { large: T; medium: T; small: T }): T {
+export function pick<T>(
+  density: 'large' | 'medium' | 'small',
+  values: { large: T; medium: T; small: T },
+): T {
   return values[density];
 }
 
@@ -317,9 +456,18 @@ export function whatsappButton(
   const padX = size * 1.4;
   const h = size * 2.6;
   const w = measureText(label, 'helvetica-bold', size) + padX * 2;
-  const bx = align === 'left' ? x : align === 'center' ? x + ((width ?? 0) - w) / 2 : x + (width ?? 0) - w;
+  const bx =
+    align === 'left' ? x : align === 'center' ? x + ((width ?? 0) - w) / 2 : x + (width ?? 0) - w;
   ops.push({ kind: 'rect', x: bx, y, w, h, fill: colors.bg, r: h / 2 });
-  ops.push({ kind: 'text', x: bx + padX, y: y + h / 2 + size * 0.36, text: label, font: 'helvetica-bold', size, color: colors.fg });
+  ops.push({
+    kind: 'text',
+    x: bx + padX,
+    y: y + h / 2 + size * 0.36,
+    text: label,
+    font: 'helvetica-bold',
+    size,
+    color: colors.fg,
+  });
   ops.push({ kind: 'link', x: bx, y, w, h, url });
   return h;
 }
@@ -348,7 +496,16 @@ export function watermark(ops: DrawOp[], text: string, W: number, H: number) {
 
 /** Mention en bas de page pour la version de démonstration. */
 export function demoMention(ops: DrawOp[], W: number, H: number, color = '#8A90A0') {
-  line(ops, 'Créé avec Catalogue Express — version de démonstration', 0, H - 7, W, { font: 'helvetica', size: 5.5, color }, 'center', 0.9);
+  line(
+    ops,
+    'Créé avec Catalogue Express — version de démonstration',
+    0,
+    H - 7,
+    W,
+    { font: 'helvetica', size: 5.5, color },
+    'center',
+    0.9,
+  );
 }
 
 export interface FlowItemHeader {
@@ -365,7 +522,8 @@ export type FlowItem = FlowItemHeader | FlowItemRow;
 export function buildFlow(products: Product[], cols: number, groupByCategory: boolean): FlowItem[] {
   const items: FlowItem[] = [];
   const pushRows = (list: Product[]) => {
-    for (let i = 0; i < list.length; i += cols) items.push({ type: 'row', products: list.slice(i, i + cols) });
+    for (let i = 0; i < list.length; i += cols)
+      items.push({ type: 'row', products: list.slice(i, i + cols) });
   };
   if (!groupByCategory) {
     pushRows(products);
@@ -432,12 +590,22 @@ export function paginate(
     if (item.type === 'header') {
       const needed = sectionHeaderHeight + cardH;
       if (!ops || remaining() < needed - 0.5) newPage();
-      design.drawSectionHeader(ops!, item.title, { x: content.x, y, w: content.w, h: sectionHeaderHeight });
+      design.drawSectionHeader(ops!, item.title, {
+        x: content.x,
+        y,
+        w: content.w,
+        h: sectionHeaderHeight,
+      });
       y += sectionHeaderHeight;
     } else {
       if (!ops || remaining() < cardH - 0.5) newPage();
       item.products.forEach((product, col) => {
-        design.drawCard(ops!, product, { x: content.x + col * (cardW + gapX), y, w: cardW, h: cardH });
+        design.drawCard(ops!, product, {
+          x: content.x + col * (cardW + gapX),
+          y,
+          w: cardW,
+          h: cardH,
+        });
       });
       y += cardH + gapY;
     }
@@ -468,7 +636,8 @@ export function paginate(
 export function coverImages(input: LayoutInput, max: number): string[] {
   const ids: string[] = [];
   for (const p of input.products) {
-    if (p.imageId && input.availableImages.has(p.imageId) && !ids.includes(p.imageId)) ids.push(p.imageId);
+    if (p.imageId && input.availableImages.has(p.imageId) && !ids.includes(p.imageId))
+      ids.push(p.imageId);
     if (ids.length >= max) break;
   }
   return ids;
@@ -477,7 +646,8 @@ export function coverImages(input: LayoutInput, max: number): string[] {
 /** Mosaïque de 1 à 4 photos dans une zone. */
 export function mosaic(ops: DrawOp[], ids: string[], box: Box, gap: number, bg: string, r = 0) {
   const n = ids.length;
-  const img = (id: string, b: Box) => ops.push({ kind: 'image', ...b, imageId: id, fit: 'cover', bg, r });
+  const img = (id: string, b: Box) =>
+    ops.push({ kind: 'image', ...b, imageId: id, fit: 'cover', bg, r });
   if (n === 0) return;
   if (n === 1) {
     img(ids[0], box);

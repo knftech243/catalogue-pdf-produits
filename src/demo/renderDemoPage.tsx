@@ -31,7 +31,12 @@ export function demoLayout(demoId: DemoId, templateId?: TemplateId, orientation?
 }
 
 /** SVG complet (avec dimensions) d'une page : utilisable comme fichier image. */
-export function renderDemoPageSvg(demoId: DemoId, pageIndex: number, templateId?: TemplateId, orientation?: Orientation): string {
+export function renderDemoPageSvg(
+  demoId: DemoId,
+  pageIndex: number,
+  templateId?: TemplateId,
+  orientation?: Orientation,
+): string {
   const { layout, images, data } = demoLayout(demoId, templateId, orientation);
   const page = layout.pages[Math.min(pageIndex, layout.pages.length - 1)];
   const markup = renderToStaticMarkup(
@@ -45,7 +50,10 @@ export function renderDemoPageSvg(demoId: DemoId, pageIndex: number, templateId?
     />,
   );
   // Dimensions explicites pour un affichage correct en <img>.
-  return markup.replace('<svg ', `<svg width="${Math.round(layout.width)}" height="${Math.round(layout.height)}" `);
+  return markup.replace(
+    '<svg ',
+    `<svg width="${Math.round(layout.width)}" height="${Math.round(layout.height)}" `,
+  );
 }
 
 export function demoPageCount(demoId: DemoId): number {

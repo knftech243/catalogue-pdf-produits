@@ -54,8 +54,8 @@ export function StepPreview({ goTo, onRestart }: Props) {
         <p className="notice notice-warning">
           <Icon name="alert" />
           <span>
-            {preview.incompleteCount} produit{preview.incompleteCount > 1 ? 's' : ''} sans nom ou sans prix{' '}
-            {preview.incompleteCount > 1 ? 'ne sont' : 'n’est'} pas dans le catalogue.{' '}
+            {preview.incompleteCount} produit{preview.incompleteCount > 1 ? 's' : ''} sans nom ou
+            sans prix {preview.incompleteCount > 1 ? 'ne sont' : 'n’est'} pas dans le catalogue.{' '}
             <button type="button" className="link-btn" onClick={() => goTo(2)}>
               Compléter
             </button>
@@ -66,7 +66,8 @@ export function StepPreview({ goTo, onRestart }: Props) {
         <p className="notice">
           <Icon name="info" />
           <span>
-            L’export gratuit contient les {layout.productCount} premiers produits ({preview.overLimitCount} non inclus).
+            L’export gratuit contient les {layout.productCount} premiers produits (
+            {preview.overLimitCount} non inclus).
           </span>
         </p>
       )}
@@ -74,8 +75,8 @@ export function StepPreview({ goTo, onRestart }: Props) {
         <p className="notice notice-warning">
           <Icon name="info" />
           <span>
-            Certains caractères spéciaux (émojis, symboles rares) ne peuvent pas être imprimés dans le PDF et ont été
-            retirés de l’aperçu.
+            Certains caractères spéciaux (émojis, symboles rares) ne peuvent pas être imprimés dans
+            le PDF et ont été retirés de l’aperçu.
           </span>
         </p>
       )}
@@ -96,7 +97,8 @@ export function StepPreview({ goTo, onRestart }: Props) {
       </div>
 
       <p className="small-note">
-        <Icon name="info" size={18} /> La mention « version démo » en filigrane correspond à l’export gratuit.
+        <Icon name="info" size={18} /> La mention « version démo » en filigrane correspond à
+        l’export gratuit.
       </p>
 
       <PageList
@@ -113,8 +115,8 @@ export function StepPreview({ goTo, onRestart }: Props) {
         message={
           <>
             <p>
-              Toutes les informations de la boutique, les produits et les photos seront <strong>définitivement
-              effacés</strong> de cet appareil.
+              Toutes les informations de la boutique, les produits et les photos seront{' '}
+              <strong>définitivement effacés</strong> de cet appareil.
             </p>
             <p>Pensez à télécharger votre PDF avant si vous en avez besoin.</p>
           </>

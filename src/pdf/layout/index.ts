@@ -8,7 +8,12 @@ import type { LayoutResult, TemplateDefinition } from './types';
 
 export { productsPerPage, TEMPLATE_META } from './meta';
 
-export const TEMPLATES: TemplateDefinition[] = [minimalTemplate, fashionTemplate, beautyTemplate, foodTemplate];
+export const TEMPLATES: TemplateDefinition[] = [
+  minimalTemplate,
+  fashionTemplate,
+  beautyTemplate,
+  foodTemplate,
+];
 
 export function getTemplate(id: TemplateId): TemplateDefinition {
   return TEMPLATES.find((t) => t.id === id) ?? minimalTemplate;

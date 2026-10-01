@@ -15,7 +15,15 @@ interface DialogProps {
   busy?: boolean;
 }
 
-export function Dialog({ open, onClose, title, children, footer, size = 'small', busy = false }: DialogProps) {
+export function Dialog({
+  open,
+  onClose,
+  title,
+  children,
+  footer,
+  size = 'small',
+  busy = false,
+}: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
@@ -91,7 +99,11 @@ export function ConfirmDialog({
           <button type="button" className="btn" onClick={onCancel}>
             {cancelLabel}
           </button>
-          <button type="button" className={`btn ${danger ? 'btn-danger-solid' : 'btn-dark'}`} onClick={onConfirm}>
+          <button
+            type="button"
+            className={`btn ${danger ? 'btn-danger-solid' : 'btn-dark'}`}
+            onClick={onConfirm}
+          >
             {confirmLabel}
           </button>
         </>

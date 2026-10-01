@@ -10,7 +10,10 @@ export function isProductComplete(p: Product): boolean {
 
 const collator = new Intl.Collator('fr', { sensitivity: 'base', numeric: true });
 
-export function sortProducts(products: Product[], sort: CatalogData['settings']['sort']): Product[] {
+export function sortProducts(
+  products: Product[],
+  sort: CatalogData['settings']['sort'],
+): Product[] {
   const list = [...products];
   switch (sort) {
     case 'name':
@@ -81,7 +84,10 @@ export function prepareLayoutInput(data: CatalogData, options: PrepareOptions): 
     input: {
       shop,
       products,
-      settings: { ...data.settings, coverTitle: cleanLine(data.settings.coverTitle) || 'Catalogue' },
+      settings: {
+        ...data.settings,
+        coverTitle: cleanLine(data.settings.coverTitle) || 'Catalogue',
+      },
       availableImages: options.availableImages,
       watermark: options.watermark,
       date: options.date ?? new Date(),

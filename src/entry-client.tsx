@@ -16,7 +16,8 @@ const app = (
 const prerendered = container.dataset.route;
 const path = normalizePath(window.location.pathname);
 const matches =
-  prerendered !== undefined && (prerendered === path || (prerendered === '/404' && !findRoute(path)));
+  prerendered !== undefined &&
+  (prerendered === path || (prerendered === '/404' && !findRoute(path)));
 
 if (container.firstElementChild && matches) {
   hydrateRoot(container, app);

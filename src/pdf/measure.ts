@@ -19,19 +19,19 @@ const EPS = 0.01;
 
 /** Remplacements des caractères absents de l'encodage WinAnsi des polices PDF standard. */
 const REPLACEMENTS: Record<string, string> = {
-  ' ': ' ', // espace fine insécable (utilisée par Intl en français)
-  ' ': ' ',
-  ' ': ' ',
-  ' ': ' ',
-  ' ': ' ',
-  '​': '',
-  '‐': '-',
-  '‑': '-',
-  '‒': '-',
-  '−': '-',
-  '′': "'",
-  '″': '"',
-  '­': '',
+  '\u202F': '\u00A0', // espace fine insécable (utilisée par Intl en français)
+  '\u2009': ' ',
+  '\u2007': ' ',
+  '\u2002': ' ',
+  '\u2003': ' ',
+  '\u200B': '',
+  '\u2010': '-',
+  '\u2011': '-',
+  '\u2012': '-',
+  '\u2212': '-',
+  '\u2032': "'",
+  '\u2033': '"',
+  '\u00AD': '',
   '\t': ' ',
 };
 
@@ -62,12 +62,16 @@ export function sanitizeForPdf(input: string): SanitizeResult {
     }
     // Lettre accentuée hors WinAnsi (ex. « ș », « ł ») : on garde la lettre de base.
     const base = ch.normalize('NFD').replace(/[̀-ͯ]/g, '');
-    if (base && base !== ch && [...base].every((c) => widths[c.codePointAt(0) ?? 0] !== undefined)) {
+    if (
+      base &&
+      base !== ch &&
+      [...base].every((c) => widths[c.codePointAt(0) ?? 0] !== undefined)
+    ) {
       out += base;
       continue;
     }
     // Sélecteurs de variation et liants d'émojis : retirés sans signalement supplémentaire.
-    if (/[︎️‍]/.test(ch)) continue;
+    if (/[\uFE0E\uFE0F\u200D]/.test(ch)) continue;
     removed = true;
   }
   // Nettoyage des espaces multiples laissés par des émojis retirés.
@@ -109,7 +113,13 @@ function breakLongWord(word: string, font: FontKey, size: number, maxWidth: numb
 }
 
 /** Ajoute « … » en raccourcissant la ligne pour qu'elle tienne dans la largeur. */
-export function ellipsize(line: string, font: FontKey, size: number, maxWidth: number, charSpace = 0): string {
+export function ellipsize(
+  line: string,
+  font: FontKey,
+  size: number,
+  maxWidth: number,
+  charSpace = 0,
+): string {
   if (measureText(line, font, size, charSpace) <= maxWidth + EPS) return line;
   const chars = [...line];
   while (chars.length > 0) {

@@ -12,7 +12,7 @@ describe('sanitizeForPdf', () => {
     expect(res.text).toBe('Promo du jour !');
   });
   it("remplace l'espace fine insécable par une espace insécable", () => {
-    expect(sanitizeForPdf('25 000').text).toBe('25 000');
+    expect(sanitizeForPdf('25\u202F000').text).toBe('25\u00A0000');
   });
   it('translittère les lettres accentuées hors alphabet PDF', () => {
     // « Ș » et « ź » deviennent « S » et « z » ; « Ł » (sans lettre de base) est retiré ; « ó » existe.
@@ -25,14 +25,25 @@ describe('sanitizeForPdf', () => {
 describe('wrapText', () => {
   const width = 120;
   it('ne dépasse jamais la largeur disponible', () => {
-    const { lines } = wrapText('Robe longue en tissu wax cent pour cent coton, coupe évasée et ceinture assortie', 'helvetica', 9, width);
+    const { lines } = wrapText(
+      'Robe longue en tissu wax cent pour cent coton, coupe évasée et ceinture assortie',
+      'helvetica',
+      9,
+      width,
+    );
     expect(lines.length).toBeGreaterThan(1);
     for (const l of lines) expect(measureText(l, 'helvetica', 9)).toBeLessThanOrEqual(width + 0.01);
   });
   it('termine par « … » quand le texte est trop long', () => {
-    const res = wrapText('un deux trois quatre cinq six sept huit neuf dix onze douze treize quatorze', 'helvetica', 10, 80, {
-      maxLines: 2,
-    });
+    const res = wrapText(
+      'un deux trois quatre cinq six sept huit neuf dix onze douze treize quatorze',
+      'helvetica',
+      10,
+      80,
+      {
+        maxLines: 2,
+      },
+    );
     expect(res.lines).toHaveLength(2);
     expect(res.truncated).toBe(true);
     expect(res.lines[1].endsWith('…')).toBe(true);
@@ -44,7 +55,10 @@ describe('wrapText', () => {
     for (const l of lines) expect(measureText(l, 'helvetica-bold', 12)).toBeLessThanOrEqual(60.01);
   });
   it('respecte les retours à la ligne', () => {
-    expect(wrapText('Ligne 1\nLigne 2', 'helvetica', 10, 200).lines).toEqual(['Ligne 1', 'Ligne 2']);
+    expect(wrapText('Ligne 1\nLigne 2', 'helvetica', 10, 200).lines).toEqual([
+      'Ligne 1',
+      'Ligne 2',
+    ]);
   });
   it('renvoie une liste vide pour un texte vide', () => {
     expect(wrapText('   ', 'helvetica', 10, 200).lines).toEqual([]);

@@ -5,7 +5,11 @@ import { layoutCatalog } from '../pdf/layout';
 import type { ImageEntry } from './state';
 
 /** Mise en page du catalogue pour l'aperçu (mêmes règles que le PDF, filigrane compris). */
-export function usePreviewLayout(data: CatalogData, images: Map<string, ImageEntry>, withWatermark = true) {
+export function usePreviewLayout(
+  data: CatalogData,
+  images: Map<string, ImageEntry>,
+  withWatermark = true,
+) {
   return useMemo(() => {
     const rights = getEntitlements();
     const available = new Set(images.keys());

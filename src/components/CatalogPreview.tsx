@@ -13,7 +13,14 @@ interface PageListProps {
   className?: string;
 }
 
-export function PageList({ layout, resolveImage, idPrefix, pages, shopName, className }: PageListProps) {
+export function PageList({
+  layout,
+  resolveImage,
+  idPrefix,
+  pages,
+  shopName,
+  className,
+}: PageListProps) {
   const indices = pages ?? layout.pages.map((_, i) => i);
   const total = layout.pages.length;
   return (

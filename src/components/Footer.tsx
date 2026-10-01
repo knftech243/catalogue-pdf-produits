@@ -11,7 +11,9 @@ const SOCIAL_LABELS: Record<keyof typeof SITE.social, string> = {
 
 export function Footer() {
   // Seuls les comptes réellement configurés (variables d'environnement) sont affichés.
-  const socials = (Object.keys(SITE.social) as (keyof typeof SITE.social)[]).filter((k) => SITE.social[k]);
+  const socials = (Object.keys(SITE.social) as (keyof typeof SITE.social)[]).filter(
+    (k) => SITE.social[k],
+  );
   const year = new Date().getFullYear();
 
   return (
@@ -20,8 +22,8 @@ export function Footer() {
         <div className="footer-brand">
           <Logo light />
           <p>
-            Transformez vos photos produits en catalogue PDF professionnel, prêt à partager. Vos photos restent sur
-            votre appareil.
+            Transformez vos photos produits en catalogue PDF professionnel, prêt à partager. Vos
+            photos restent sur votre appareil.
           </p>
           <Link to="/creer" className="btn btn-primary btn-sm">
             Créer mon catalogue

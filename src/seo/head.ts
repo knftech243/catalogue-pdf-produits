@@ -6,7 +6,11 @@ import { FAQ_ITEMS } from '../content/faq';
 import type { RouteDef } from '../routes';
 
 function escapeHtml(text: string): string {
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 export function canonicalUrl(route: RouteDef): string {
@@ -25,7 +29,12 @@ function jsonLd(route: RouteDef): object[] {
       operatingSystem: 'Tous (navigateur web)',
       inLanguage: 'fr',
       description: route.description,
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', description: 'Aperçu et export de démonstration gratuits' },
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+        description: 'Aperçu et export de démonstration gratuits',
+      },
     });
   }
   if (route.path === '/faq') {
@@ -49,7 +58,9 @@ export function renderHeadTags(route: RouteDef): string {
   const tags = [
     `<title>${escapeHtml(route.title)}</title>`,
     `<meta name="description" content="${escapeHtml(route.description)}" />`,
-    route.noindex ? '<meta name="robots" content="noindex, follow" />' : `<link rel="canonical" href="${url}" />`,
+    route.noindex
+      ? '<meta name="robots" content="noindex, follow" />'
+      : `<link rel="canonical" href="${url}" />`,
     `<meta property="og:type" content="website" />`,
     `<meta property="og:site_name" content="${SITE.name}" />`,
     `<meta property="og:locale" content="${SITE.locale}" />`,
@@ -63,7 +74,9 @@ export function renderHeadTags(route: RouteDef): string {
     `<meta name="twitter:card" content="summary_large_image" />`,
   ];
   for (const block of jsonLd(route)) {
-    tags.push(`<script type="application/ld+json">${JSON.stringify(block).replace(/</g, '\\u003c')}</script>`);
+    tags.push(
+      `<script type="application/ld+json">${JSON.stringify(block).replace(/</g, '\\u003c')}</script>`,
+    );
   }
   return tags.join('\n    ');
 }

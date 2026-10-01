@@ -55,7 +55,9 @@ export function catalogReducer(state: CatalogData, action: Action): CatalogData 
     case 'update':
       return {
         ...state,
-        products: state.products.map((p) => (p.id === action.id ? { ...p, ...action.patch, id: p.id } : p)),
+        products: state.products.map((p) =>
+          p.id === action.id ? { ...p, ...action.patch, id: p.id } : p,
+        ),
       };
     case 'delete':
       return { ...state, products: state.products.filter((p) => p.id !== action.id) };
@@ -145,10 +147,16 @@ export function CreatorProvider({ children }: { children: ReactNode }) {
   const [prefs, setPrefs] = useState<Prefs>({ autosave: true });
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const [lastDeleted, setLastDeleted] = useState<{ product: Product; index: number } | null>(null);
+  // Valeurs à jour pour les rappels et écouteurs d'événements (mises à jour après chaque rendu,
+  // avant les autres effets déclarés plus bas).
   const imagesRef = useRef(images);
-  imagesRef.current = images;
   const prefsRef = useRef(prefs);
-  prefsRef.current = prefs;
+  const dataRef = useRef(data);
+  useEffect(() => {
+    imagesRef.current = images;
+    prefsRef.current = prefs;
+    dataRef.current = data;
+  });
 
   // Chargement initial des données enregistrées sur l'appareil.
   useEffect(() => {
@@ -186,18 +194,36 @@ export function CreatorProvider({ children }: { children: ReactNode }) {
   );
 
   // Sauvegarde automatique (textes) avec un léger délai.
+  const dirtyRef = useRef(false);
   useEffect(() => {
-    if (!ready) return;
-    if (!prefs.autosave) {
-      setSaveStatus('disabled');
-      return;
-    }
+    if (!ready || !prefs.autosave) return;
+    dirtyRef.current = true;
     const timer = window.setTimeout(() => {
+      dirtyRef.current = false;
       const result = saveCatalog(data);
       setSaveStatus(result === 'ok' ? 'saved' : result === 'quota' ? 'error' : 'unavailable');
-    }, 400);
+    }, 300);
     return () => window.clearTimeout(timer);
   }, [data, ready, prefs.autosave]);
+
+  // Sauvegarde immédiate si la page est masquée ou fermée (changement d'application sur Android,
+  // rechargement, fermeture de l'onglet) : aucune modification récente n'est perdue.
+  useEffect(() => {
+    if (!ready) return;
+    const flush = () => {
+      if (dirtyRef.current && prefsRef.current.autosave) {
+        dirtyRef.current = false;
+        saveCatalog(dataRef.current);
+      }
+    };
+    const onVisibility = () => document.visibilityState === 'hidden' && flush();
+    window.addEventListener('pagehide', flush);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      window.removeEventListener('pagehide', flush);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [ready]);
 
   // Photos « réservées » : en cours d'édition, pas encore rattachées à un produit.
   const pinnedRef = useRef(new Set<string>());
@@ -283,7 +309,13 @@ export function CreatorProvider({ children }: { children: ReactNode }) {
       } else {
         const result = saveCatalog(data);
         for (const entry of imagesRef.current.values()) {
-          await putImage({ id: entry.id, blob: entry.blob, thumb: entry.thumb, width: entry.width, height: entry.height });
+          await putImage({
+            id: entry.id,
+            blob: entry.blob,
+            thumb: entry.thumb,
+            width: entry.width,
+            height: entry.height,
+          });
         }
         setSaveStatus(result === 'ok' ? 'saved' : 'error');
       }
@@ -321,7 +353,7 @@ export function CreatorProvider({ children }: { children: ReactNode }) {
       ready,
       images,
       prefs,
-      saveStatus,
+      saveStatus: prefs.autosave ? saveStatus : 'disabled',
       setShop: (patch) => dispatch({ type: 'shop', patch }),
       setSettings: (patch) => dispatch({ type: 'settings', patch }),
       addProducts: (products) => dispatch({ type: 'add', products }),

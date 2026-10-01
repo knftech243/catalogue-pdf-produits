@@ -8,6 +8,7 @@
   --muted: #565c74;
   --mango: #ff7a1a;
   --mango-hover: #f06a08;
+  --mango-text: #c2410c;
   --mango-50: #fff1e6;
   --mango-100: #ffe0c7;
   --cream: #fffaf4;
@@ -36,7 +37,8 @@
   --shadow-lg: 0 24px 60px -20px rgba(27, 31, 59, 0.35);
 
   /* Typographie : polices système (aucun téléchargement) */
-  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font:
+    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
   --text-xs: 0.8125rem;
   --text-sm: 0.9375rem;
   --text-md: 1rem;

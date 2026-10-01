@@ -14,7 +14,12 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const mark = readFileSync(join(root, 'branding', 'logo-mark.svg'), 'utf8');
 
 // Rendu serveur des vraies pages de démonstration (même moteur que le PDF).
-const vite = await createServer({ root, logLevel: 'error', server: { middlewareMode: true, watch: null }, appType: 'custom' });
+const vite = await createServer({
+  root,
+  logLevel: 'error',
+  server: { middlewareMode: true, watch: null },
+  appType: 'custom',
+});
 const { renderDemoPageSvg } = await vite.ssrLoadModule('/src/demo/renderDemoPage.tsx');
 const page = (demoId, index) => renderDemoPageSvg(demoId, index);
 const coverFashion = page('vetements', 0);
@@ -33,7 +38,11 @@ async function snap(html, width, height, out) {
   console.log(`✓ ${out}`);
 }
 
-const iconHtml = (size, padding, bg) => `<!doctype html><html><body style="margin:0;background:${bg};display:grid;place-items:center;width:${size}px;height:${size}px">
+const iconHtml = (
+  size,
+  padding,
+  bg,
+) => `<!doctype html><html><body style="margin:0;background:${bg};display:grid;place-items:center;width:${size}px;height:${size}px">
 <div style="width:${size - 2 * padding}px;height:${size - 2 * padding}px">${mark.replace('width="48" height="48"', 'width="100%" height="100%"')}</div></body></html>`;
 
 await snap(iconHtml(180, 0, '#FF7A1A'), 180, 180, 'public/apple-touch-icon.png');

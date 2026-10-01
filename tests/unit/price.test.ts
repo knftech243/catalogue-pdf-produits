@@ -2,12 +2,16 @@ import { describe, expect, it } from 'vitest';
 import { discountPercent, formatNumber, formatPrice, parsePrice } from '../../src/core/price';
 import type { CurrencySettings } from '../../src/core/types';
 
-const cur = (code: CurrencySettings['code'], customSymbol = '', customPosition: 'before' | 'after' = 'after'): CurrencySettings => ({
+const cur = (
+  code: CurrencySettings['code'],
+  customSymbol = '',
+  customPosition: 'before' | 'after' = 'after',
+): CurrencySettings => ({
   code,
   customSymbol,
   customPosition,
 });
-const plain = (s: string) => s.replace(/ /g, ' ');
+const plain = (s: string) => s.replace(/\u00A0/g, ' ');
 
 describe('parsePrice', () => {
   it.each([
@@ -61,7 +65,7 @@ describe('formatPrice', () => {
   });
 
   it('utilise des espaces insécables (le prix ne se coupe jamais)', () => {
-    expect(formatPrice(25000, cur('CDF'))).toBe('25 000 FC');
+    expect(formatPrice(25000, cur('CDF'))).toBe('25\u00A0000\u00A0FC');
   });
 
   it('formatNumber gère les grands nombres', () => {

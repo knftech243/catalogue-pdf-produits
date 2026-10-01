@@ -23,7 +23,10 @@ export interface Entitlements {
   socialLinks: boolean;
 }
 
-export const PLANS: Record<PlanId, { label: string; available: boolean; entitlements: Entitlements }> = {
+export const PLANS: Record<
+  PlanId,
+  { label: string; available: boolean; entitlements: Entitlements }
+> = {
   free: {
     label: 'Gratuit',
     available: true,

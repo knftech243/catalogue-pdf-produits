@@ -12,14 +12,18 @@ const NAV = [
 
 export function Header() {
   const { path } = useRouter();
-  const [open, setOpen] = useState(false);
-
-  // Ferme le menu mobile après une navigation.
-  useEffect(() => setOpen(false), [path]);
+  // Le menu mobile est ouvert « pour une page donnée » : il se referme tout seul après une navigation.
+  const [openFor, setOpenFor] = useState<string | null>(null);
+  const open = openFor === path;
+  const setOpen = (value: boolean | ((v: boolean) => boolean)) =>
+    setOpenFor((current) => {
+      const next = typeof value === 'function' ? value(current === path) : value;
+      return next ? path : null;
+    });
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpenFor(null);
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [open]);

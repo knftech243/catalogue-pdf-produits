@@ -58,8 +58,13 @@ function Creator() {
 
   const canLeave = useCallback(
     (from: number): string | null => {
-      if (from === 1 && !data.shop.name.trim()) return 'Indiquez le nom de votre boutique pour continuer.';
-      if (from === 1 && data.shop.currency.code === 'CUSTOM' && !data.shop.currency.customSymbol.trim())
+      if (from === 1 && !data.shop.name.trim())
+        return 'Indiquez le nom de votre boutique pour continuer.';
+      if (
+        from === 1 &&
+        data.shop.currency.code === 'CUSTOM' &&
+        !data.shop.currency.customSymbol.trim()
+      )
         return 'Indiquez le symbole de votre devise pour continuer.';
       if (from === 2 && stats.complete === 0)
         return data.products.length === 0
@@ -81,7 +86,8 @@ function Creator() {
             if (s !== step) navigate(`/creer?etape=${s}`);
             requestAnimationFrame(() => {
               const el =
-                document.querySelector<HTMLElement>('[aria-invalid="true"]') ?? document.getElementById('products-error');
+                document.querySelector<HTMLElement>('[aria-invalid="true"]') ??
+                document.getElementById('products-error');
               el?.focus?.();
               el?.scrollIntoView({ block: 'center' });
             });
@@ -103,7 +109,9 @@ function Creator() {
       try {
         const demo = await buildDemo(id, (done, total) => setDemoProgress({ done, total }));
         await loadData(demo.data, demo.images);
-        announce(`Boutique exemple « ${demo.data.shop.name} » chargée avec ${demo.data.products.length} produits.`);
+        announce(
+          `Boutique exemple « ${demo.data.shop.name} » chargée avec ${demo.data.products.length} produits.`,
+        );
         navigate('/creer?etape=2', { replace: true });
       } catch {
         announce('Le chargement de l’exemple a échoué. Réessayez.');
@@ -129,6 +137,9 @@ function Creator() {
     const param = new URLSearchParams(search).get('exemple') as DemoId | null;
     if (param && DEMO_SHOPS.some((d) => d.id === param)) {
       demoParamHandled.current = true;
+      // Effet volontaire : synchronisation unique avec un paramètre d'adresse, une fois les données
+      // locales chargées (ouvre la confirmation ou lance la préparation asynchrone de l'exemple).
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       requestDemo(param);
     }
   }, [ready, search, requestDemo]);
@@ -159,8 +170,15 @@ function Creator() {
               <Icon name="shield" size={18} /> {PRIVACY_NOTICE}
             </p>
           </div>
-          <button type="button" className={`save-status is-${saveStatus}`} onClick={() => setDataPanel(true)}>
-            <Icon name={saveStatus === 'error' || saveStatus === 'unavailable' ? 'alert' : 'save'} size={18} />
+          <button
+            type="button"
+            className={`save-status is-${saveStatus}`}
+            onClick={() => setDataPanel(true)}
+          >
+            <Icon
+              name={saveStatus === 'error' || saveStatus === 'unavailable' ? 'alert' : 'save'}
+              size={18}
+            />
             <span>{SAVE_LABELS[saveStatus]}</span>
             <span className="save-status-more">Données sur cet appareil</span>
           </button>
@@ -171,7 +189,10 @@ function Creator() {
             Étape {step} sur {STEPS.length} — <strong>{STEPS[step - 1].label}</strong>
           </p>
           <div className="stepper-bar" aria-hidden="true">
-            <div className="stepper-fill" style={{ width: `${((step - 1) / (STEPS.length - 1)) * 100}%` }} />
+            <div
+              className="stepper-fill"
+              style={{ width: `${((step - 1) / (STEPS.length - 1)) * 100}%` }}
+            />
           </div>
           <ol>
             {STEPS.map((s, i) => {
@@ -185,7 +206,9 @@ function Creator() {
                     aria-current={n === step ? 'step' : undefined}
                     aria-label={`Étape ${n} : ${s.label}${state === 'done' ? ' (terminée)' : ''}`}
                   >
-                    <span className="step-dot">{state === 'done' ? <Icon name="check" size={16} /> : n}</span>
+                    <span className="step-dot">
+                      {state === 'done' ? <Icon name="check" size={16} /> : n}
+                    </span>
                     <span className="step-label">{s.label}</span>
                   </button>
                 </li>
@@ -200,7 +223,11 @@ function Creator() {
 
         {step === 1 && <StepShop showErrors={!!showErrors[1]} />}
         {step === 2 && (
-          <StepProducts onOpenDemo={() => setDemoDialog(true)} announce={announce} showErrors={!!showErrors[2]} />
+          <StepProducts
+            onOpenDemo={() => setDemoDialog(true)}
+            announce={announce}
+            showErrors={!!showErrors[2]}
+          />
         )}
         {step === 3 && <StepTemplate />}
         {step === 4 && <StepPreview goTo={goTo} onRestart={restart} />}
@@ -228,11 +255,23 @@ function Creator() {
         {announcement}
       </div>
 
-      <Dialog open={demoDialog} onClose={() => setDemoDialog(false)} title="Charger une boutique exemple">
-        <p>Découvrez l’outil avec une boutique fictive complète (au moins 12 produits). Vous pourrez tout modifier.</p>
+      <Dialog
+        open={demoDialog}
+        onClose={() => setDemoDialog(false)}
+        title="Charger une boutique exemple"
+      >
+        <p>
+          Découvrez l’outil avec une boutique fictive complète (au moins 12 produits). Vous pourrez
+          tout modifier.
+        </p>
         <div className="demo-choices">
           {DEMO_SHOPS.map((d) => (
-            <button key={d.id} type="button" className="demo-choice" onClick={() => requestDemo(d.id)}>
+            <button
+              key={d.id}
+              type="button"
+              className="demo-choice"
+              onClick={() => requestDemo(d.id)}
+            >
               <strong>{d.label}</strong>
               <span>
                 {d.shop.name} · {d.products.length} produits
@@ -247,8 +286,8 @@ function Creator() {
         title="Remplacer votre catalogue ?"
         message={
           <p>
-            Votre boutique et vos produits actuels seront remplacés par l’exemple. Cette action ne peut pas être
-            annulée.
+            Votre boutique et vos produits actuels seront remplacés par l’exemple. Cette action ne
+            peut pas être annulée.
           </p>
         }
         confirmLabel="Remplacer par l’exemple"
@@ -264,7 +303,8 @@ function Creator() {
         <div role="status" className="progress-head">
           <span className="spinner" aria-hidden="true" />
           <span>
-            Préparation des photos d’exemple… {demoProgress ? `${demoProgress.done} / ${demoProgress.total}` : ''}
+            Préparation des photos d’exemple…{' '}
+            {demoProgress ? `${demoProgress.done} / ${demoProgress.total}` : ''}
           </span>
         </div>
       </Dialog>

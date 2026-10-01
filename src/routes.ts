@@ -31,7 +31,8 @@ export const ROUTES: RouteDef[] = [
   {
     path: '/modeles',
     label: 'Modèles',
-    title: 'Modèles de catalogues PDF : mode, cosmétiques, restaurant, épicerie — Catalogue Express',
+    title:
+      'Modèles de catalogues PDF : mode, cosmétiques, restaurant, épicerie — Catalogue Express',
     description:
       'Quatre modèles de catalogues PDF prêts à l’emploi : Minimal clair, Mode élégante, Cosmétiques moderne et Épicerie et restauration colorée.',
     priority: 0.8,
@@ -86,7 +87,8 @@ export const ROUTES: RouteDef[] = [
     path: '/remboursement',
     label: 'Politique de remboursement',
     title: 'Politique de remboursement — Catalogue Express',
-    description: 'Politique de remboursement de la future offre Premium de Catalogue Express (modèle à adapter).',
+    description:
+      'Politique de remboursement de la future offre Premium de Catalogue Express (modèle à adapter).',
     priority: 0.2,
   },
   {

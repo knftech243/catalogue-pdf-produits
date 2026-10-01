@@ -34,7 +34,11 @@ export function RouterProvider({ url, children }: { url: string; children: React
   const [location, setLocation] = useState(() => {
     const [pathAndSearch, hash = ''] = url.split('#');
     const [path, search = ''] = pathAndSearch.split('?');
-    return { path: normalizePath(path), search: search ? `?${search}` : '', hash: hash ? `#${hash}` : '' };
+    return {
+      path: normalizePath(path),
+      search: search ? `?${search}` : '',
+      hash: hash ? `#${hash}` : '',
+    };
   });
 
   useEffect(() => {
@@ -50,17 +54,22 @@ export function RouterProvider({ url, children }: { url: string; children: React
       return;
     }
     const samePage = normalizePath(target.pathname) === normalizePath(window.location.pathname);
-    if (options.replace) window.history.replaceState(null, '', target.pathname + target.search + target.hash);
+    if (options.replace)
+      window.history.replaceState(null, '', target.pathname + target.search + target.hash);
     else window.history.pushState(null, '', target.pathname + target.search + target.hash);
     setLocation(readLocation());
     if (target.hash) {
       requestAnimationFrame(() => {
-        document.getElementById(decodeURIComponent(target.hash.slice(1)))?.scrollIntoView({ block: 'start' });
+        document
+          .getElementById(decodeURIComponent(target.hash.slice(1)))
+          ?.scrollIntoView({ block: 'start' });
       });
     } else if (!samePage || !options.replace) {
       window.scrollTo(0, 0);
       // Accessibilité : le focus passe au contenu principal de la nouvelle page.
-      requestAnimationFrame(() => document.getElementById('contenu')?.focus({ preventScroll: true }));
+      requestAnimationFrame(() =>
+        document.getElementById('contenu')?.focus({ preventScroll: true }),
+      );
     }
   }, []);
 

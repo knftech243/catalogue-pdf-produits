@@ -20,7 +20,13 @@ interface Props {
   captions?: boolean;
 }
 
-export function DemoPages({ demoId, pages = [1, 2], className, eager = false, captions = true }: Props) {
+export function DemoPages({
+  demoId,
+  pages = [1, 2],
+  className,
+  eager = false,
+  captions = true,
+}: Props) {
   return (
     <div className={`page-list ${className ?? ''}`}>
       {pages.map((n) => (
@@ -30,7 +36,11 @@ export function DemoPages({ demoId, pages = [1, 2], className, eager = false, ca
             src={`/apercus/${demoId}-${n}.svg`}
             width={595}
             height={842}
-            alt={n === 1 ? `Couverture du catalogue de démonstration « ${NAMES[demoId]} »` : `Page ${n} du catalogue de démonstration « ${NAMES[demoId]} »`}
+            alt={
+              n === 1
+                ? `Couverture du catalogue de démonstration « ${NAMES[demoId]} »`
+                : `Page ${n} du catalogue de démonstration « ${NAMES[demoId]} »`
+            }
             loading={eager ? 'eager' : 'lazy'}
             decoding="async"
             fetchPriority={eager ? 'high' : undefined}

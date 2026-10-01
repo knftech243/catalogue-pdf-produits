@@ -74,7 +74,11 @@ export const TEMPLATE_META: Record<TemplateId, TemplateMeta> = {
 
 export const TEMPLATE_ORDER: TemplateId[] = ['minimal', 'fashion', 'beauty', 'food'];
 
-export function productsPerPage(id: TemplateId, orientation: Orientation, density: Density): number {
+export function productsPerPage(
+  id: TemplateId,
+  orientation: Orientation,
+  density: Density,
+): number {
   const grid = TEMPLATE_META[id].grid(orientation, density);
   return grid.cols * grid.rows;
 }

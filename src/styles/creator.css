@@ -507,10 +507,13 @@
   margin: 12px 0 0;
   padding: 0;
   display: grid;
+  /* minmax(0, 1fr) : un nom de produit très long ne doit jamais élargir la liste (débordement mobile). */
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
 }
 
 .product-row {
+  min-width: 0;
   display: flex;
   align-items: stretch;
   gap: 6px;
@@ -886,13 +889,13 @@
 .template-choices {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-bottom: 20px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 600px) {
   .template-choices {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -963,7 +966,7 @@
 
 @media (max-width: 900px) {
   .template-settings {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -1135,7 +1138,7 @@
 
 @media (max-width: 860px) {
   .export-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

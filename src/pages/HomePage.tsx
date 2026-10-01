@@ -39,12 +39,36 @@ const BENEFITS: { icon: IconName; title: string; text: string; tone?: string }[]
 ];
 
 const USE_CASES: { icon: IconName; title: string; text: string }[] = [
-  { icon: 'shirt', title: 'Vêtements', text: 'Nouvelles collections, tailles et promotions en un seul document.' },
-  { icon: 'bottle', title: 'Cosmétiques', text: 'Soins, parfums et maquillage avec prix et disponibilités.' },
-  { icon: 'utensils', title: 'Restaurant', text: 'Un menu clair, classé par catégories, facile à envoyer aux clients.' },
-  { icon: 'basket', title: 'Épicerie', text: 'Une liste de prix à jour pour les commandes et les livraisons.' },
-  { icon: 'watch', title: 'Accessoires', text: 'Sacs, montres, bijoux : mettez chaque pièce en valeur.' },
-  { icon: 'shoe', title: 'Chaussures', text: 'Pointures, modèles et prix réunis dans un catalogue propre.' },
+  {
+    icon: 'shirt',
+    title: 'Vêtements',
+    text: 'Nouvelles collections, tailles et promotions en un seul document.',
+  },
+  {
+    icon: 'bottle',
+    title: 'Cosmétiques',
+    text: 'Soins, parfums et maquillage avec prix et disponibilités.',
+  },
+  {
+    icon: 'utensils',
+    title: 'Restaurant',
+    text: 'Un menu clair, classé par catégories, facile à envoyer aux clients.',
+  },
+  {
+    icon: 'basket',
+    title: 'Épicerie',
+    text: 'Une liste de prix à jour pour les commandes et les livraisons.',
+  },
+  {
+    icon: 'watch',
+    title: 'Accessoires',
+    text: 'Sacs, montres, bijoux : mettez chaque pièce en valeur.',
+  },
+  {
+    icon: 'shoe',
+    title: 'Chaussures',
+    text: 'Pointures, modèles et prix réunis dans un catalogue propre.',
+  },
 ];
 
 export function HomePage() {
@@ -56,11 +80,13 @@ export function HomePage() {
           <div>
             <p className="eyebrow">Gratuit · sans inscription · en français</p>
             <h1>
-              Transformez vos photos produits en <span className="highlight">catalogue PDF</span> professionnel.
+              Transformez vos photos produits en <span className="highlight">catalogue PDF</span>{' '}
+              professionnel.
             </h1>
             <p className="lead">
-              Ajoutez vos photos, vos prix et vos coordonnées. Catalogue Express crée un joli catalogue PDF, prêt à
-              envoyer à vos clients sur WhatsApp ou par e-mail. Directement depuis votre téléphone.
+              Ajoutez vos photos, vos prix et vos coordonnées. Catalogue Express crée un joli
+              catalogue PDF, prêt à envoyer à vos clients sur WhatsApp ou par e-mail. Directement
+              depuis votre téléphone.
             </p>
             <div className="hero-actions">
               <Link to="/creer" className="btn btn-primary btn-lg">
@@ -82,7 +108,11 @@ export function HomePage() {
               </li>
             </ul>
           </div>
-          <div className="hero-visual" aria-label="Exemple : un catalogue PDF envoyé dans une discussion" role="img">
+          <div
+            className="hero-visual"
+            aria-label="Exemple : un catalogue PDF envoyé dans une discussion"
+            role="img"
+          >
             <div className="hero-phone" aria-hidden="true">
               <div className="hero-phone-screen">
                 <div className="hero-chat-head">
@@ -94,7 +124,9 @@ export function HomePage() {
                   </span>
                 </div>
                 <div className="hero-chat-body">
-                  <div className="bubble">Bonjour ! Vous avez quoi comme nouveautés cette semaine ?</div>
+                  <div className="bubble">
+                    Bonjour ! Vous avez quoi comme nouveautés cette semaine ?
+                  </div>
                   <div className="bubble me bubble-file">
                     <span className="bubble-file-icon">PDF</span>
                     <span>
@@ -124,8 +156,9 @@ export function HomePage() {
             <p className="eyebrow">Le problème</p>
             <h2 id="probleme">Envoyer ses produits photo par photo, c’est long et désordonné</h2>
             <p className="lead">
-              Beaucoup de vendeurs envoient leurs photos une par une sur WhatsApp, puis répondent aux mêmes questions :
-              « C’est combien ? », « Il reste quelles tailles ? ». Le client s’y perd et vous perdez du temps.
+              Beaucoup de vendeurs envoient leurs photos une par une sur WhatsApp, puis répondent
+              aux mêmes questions : « C’est combien ? », « Il reste quelles tailles ? ». Le client
+              s’y perd et vous perdez du temps.
             </p>
           </div>
           <div className="problem-grid">
@@ -172,10 +205,13 @@ export function HomePage() {
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">La solution</p>
-            <h2 id="solution">Un catalogue propre, créé à partir de vos photos, prix et descriptions</h2>
+            <h2 id="solution">
+              Un catalogue propre, créé à partir de vos photos, prix et descriptions
+            </h2>
             <p className="lead">
-              Catalogue Express met vos produits en page automatiquement : couverture, grille de produits, prix bien
-              visibles, numéros de page et coordonnées. Vous choisissez simplement le style.
+              Catalogue Express met vos produits en page automatiquement : couverture, grille de
+              produits, prix bien visibles, numéros de page et coordonnées. Vous choisissez
+              simplement le style.
             </p>
           </div>
           <div className="grid-3">
@@ -184,21 +220,29 @@ export function HomePage() {
                 <Icon name="camera" />
               </span>
               <h3>Vos vraies photos</h3>
-              <p>Prenez vos produits en photo avec votre téléphone : elles sont recadrées sans être déformées.</p>
+              <p>
+                Prenez vos produits en photo avec votre téléphone : elles sont recadrées sans être
+                déformées.
+              </p>
             </div>
             <div className="feature-card">
               <span className="feature-icon indigo">
                 <Icon name="palette" />
               </span>
               <h3>4 modèles au choix</h3>
-              <p>Minimal, mode, cosmétiques ou restauration : chaque modèle a sa propre mise en page.</p>
+              <p>
+                Minimal, mode, cosmétiques ou restauration : chaque modèle a sa propre mise en page.
+              </p>
             </div>
             <div className="feature-card">
               <span className="feature-icon mint">
                 <Icon name="message" />
               </span>
               <h3>Liens WhatsApp dans le PDF</h3>
-              <p>Vos clients touchent un produit et vous écrivent directement, avec le nom du produit déjà rempli.</p>
+              <p>
+                Vos clients touchent un produit et vous écrivent directement, avec le nom du produit
+                déjà rempli.
+              </p>
             </div>
           </div>
         </div>
@@ -215,7 +259,10 @@ export function HomePage() {
             <li className="step-card">
               <span className="step-number">1</span>
               <h3>Ajoutez vos produits</h3>
-              <p>Une photo, un nom, un prix. Ajoutez plusieurs photos d’un coup puis complétez les prix.</p>
+              <p>
+                Une photo, un nom, un prix. Ajoutez plusieurs photos d’un coup puis complétez les
+                prix.
+              </p>
             </li>
             <li className="step-card">
               <span className="step-number">2</span>
@@ -263,7 +310,10 @@ export function HomePage() {
           <div className="section-head">
             <p className="eyebrow">Pour qui ?</p>
             <h2 id="usages">Pensé pour les petits commerces</h2>
-            <p className="lead">Vendeurs WhatsApp, boutiques, restaurants, épiceries : en Afrique comme dans la diaspora.</p>
+            <p className="lead">
+              Vendeurs WhatsApp, boutiques, restaurants, épiceries : en Afrique comme dans la
+              diaspora.
+            </p>
           </div>
           <div className="grid-3">
             {USE_CASES.map((u) => (
@@ -287,11 +337,18 @@ export function HomePage() {
           <div className="section-head">
             <p className="eyebrow">Aperçus</p>
             <h2 id="apercus">Des exemples de catalogues créés avec l’outil</h2>
-            <p className="lead">Boutiques fictives, illustrations dessinées pour la démonstration.</p>
+            <p className="lead">
+              Boutiques fictives, illustrations dessinées pour la démonstration.
+            </p>
           </div>
           <div className="showcase">
             {DEMO_SHOPS.map((demo) => (
-              <Link key={demo.id} to="/exemples" className="showcase-item" aria-label={`Voir l’exemple ${demo.label}`}>
+              <Link
+                key={demo.id}
+                to="/exemples"
+                className="showcase-item"
+                aria-label={`Voir l’exemple ${demo.label}`}
+              >
                 <DemoPages demoId={demo.id} pages={[1]} captions={false} />
                 <h3>{demo.label}</h3>
                 <p>Modèle {TEMPLATE_META[demo.settings.templateId].name}</p>
@@ -312,7 +369,10 @@ export function HomePage() {
           <div className="section-head">
             <p className="eyebrow">Offres</p>
             <h2 id="offres">Gratuit aujourd’hui, Premium bientôt</h2>
-            <p className="lead">Nous préférons être clairs : le paiement n’est pas encore ouvert. Tout ce qui est gratuit fonctionne vraiment.</p>
+            <p className="lead">
+              Nous préférons être clairs : le paiement n’est pas encore ouvert. Tout ce qui est
+              gratuit fonctionne vraiment.
+            </p>
           </div>
           <div className="pricing-grid">
             <div className="plan featured">
@@ -323,12 +383,18 @@ export function HomePage() {
             <div className="plan">
               <span className="badge badge-free">Disponible</span>
               <h3>Export de démonstration</h3>
-              <p>Téléchargez un vrai PDF utilisable, avec une mention « version démo » discrète, jusqu’à 50 produits.</p>
+              <p>
+                Téléchargez un vrai PDF utilisable, avec une mention « version démo » discrète,
+                jusqu’à 50 produits.
+              </p>
             </div>
             <div className="plan">
               <span className="badge badge-soon">Bientôt</span>
               <h3>Premium</h3>
-              <p>Sans filigrane, meilleure résolution, davantage de produits. Tarif annoncé au lancement.</p>
+              <p>
+                Sans filigrane, meilleure résolution, davantage de produits. Tarif annoncé au
+                lancement.
+              </p>
             </div>
           </div>
           <p style={{ marginTop: 24 }}>
@@ -349,9 +415,9 @@ export function HomePage() {
             <div>
               <h2 id="confidentialite">Vos photos restent chez vous</h2>
               <p>
-                <strong>{PRIVACY_NOTICE}</strong> Les photos sont redimensionnées et le PDF est fabriqué directement dans
-                votre navigateur : aucune image n’est envoyée sur un serveur. Vous pouvez effacer vos données locales à
-                tout moment.
+                <strong>{PRIVACY_NOTICE}</strong> Les photos sont redimensionnées et le PDF est
+                fabriqué directement dans votre navigateur : aucune image n’est envoyée sur un
+                serveur. Vous pouvez effacer vos données locales à tout moment.
               </p>
               <p>
                 <Link to="/confidentialite">Lire la politique de confidentialité</Link>
@@ -382,14 +448,18 @@ export function HomePage() {
             <p className="eyebrow">Avis clients</p>
             <h2 id="avis">Ils utilisent Catalogue Express</h2>
           </div>
-          <p className="reviews-placeholder">Les premiers avis clients seront ajoutés ici après le lancement.</p>
+          <p className="reviews-placeholder">
+            Les premiers avis clients seront ajoutés ici après le lancement.
+          </p>
         </div>
       </section>
 
       <section className="section cta-band">
         <div className="container narrow center">
           <h2>Prêt à créer votre catalogue ?</h2>
-          <p className="lead">C’est gratuit, sans inscription, et vos photos ne quittent pas votre téléphone.</p>
+          <p className="lead">
+            C’est gratuit, sans inscription, et vos photos ne quittent pas votre téléphone.
+          </p>
           <Link to="/creer" className="btn btn-primary btn-lg">
             Créer mon catalogue gratuitement
           </Link>

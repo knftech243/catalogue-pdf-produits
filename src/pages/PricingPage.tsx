@@ -11,8 +11,9 @@ export function PricingPage() {
           <p className="eyebrow">Tarifs</p>
           <h1>Commencez gratuitement</h1>
           <p className="lead">
-            Catalogue Express est utilisable gratuitement dès aujourd’hui. Une offre Premium est en préparation :{' '}
-            <strong>le paiement n’est pas encore ouvert</strong> et aucun achat n’est possible pour le moment.
+            Catalogue Express est utilisable gratuitement dès aujourd’hui. Une offre Premium est en
+            préparation : <strong>le paiement n’est pas encore ouvert</strong> et aucun achat n’est
+            possible pour le moment.
           </p>
         </div>
       </section>
@@ -36,7 +37,8 @@ export function PricingPage() {
                   <Icon name="check" /> Logo, couleur, coordonnées et liens WhatsApp
                 </li>
                 <li>
-                  <Icon name="check" /> Export PDF de démonstration, jusqu’à {free.maxProductsPerExport} produits
+                  <Icon name="check" /> Export PDF de démonstration, jusqu’à{' '}
+                  {free.maxProductsPerExport} produits
                 </li>
                 <li className="muted">
                   <Icon name="info" /> Mention « version démo » discrète sur les pages
@@ -77,9 +79,10 @@ export function PricingPage() {
           <div className="notice" style={{ marginTop: 24 }}>
             <Icon name="info" />
             <p>
-              Quand l’offre Premium ouvrira, le paiement se fera auprès d’un prestataire spécialisé : Catalogue Express ne
-              vous demandera jamais votre numéro de carte ou votre code Mobile Money directement. Les conditions de
-              remboursement sont décrites dans la <Link to="/remboursement">politique de remboursement</Link>.
+              Quand l’offre Premium ouvrira, le paiement se fera auprès d’un prestataire spécialisé
+              : Catalogue Express ne vous demandera jamais votre numéro de carte ou votre code
+              Mobile Money directement. Les conditions de remboursement sont décrites dans la{' '}
+              <Link to="/remboursement">politique de remboursement</Link>.
             </p>
           </div>
         </div>

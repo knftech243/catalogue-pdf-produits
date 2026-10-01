@@ -1,6 +1,12 @@
 // Champs de formulaire accessibles : libellé, aide et message d'erreur reliés au champ.
 
-import { useId, type ComponentPropsWithRef, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from 'react';
+import {
+  useId,
+  type ComponentPropsWithRef,
+  type ReactNode,
+  type SelectHTMLAttributes,
+  type TextareaHTMLAttributes,
+} from 'react';
 import { Icon } from '../components/Icon';
 
 interface BaseProps {
@@ -41,13 +47,22 @@ function Meta({ id, hint, error, warning, counter }: BaseProps & { id: string })
 }
 
 function describedBy(id: string, p: BaseProps) {
-  return [p.hint ? `${id}-hint` : '', p.error || p.warning ? `${id}-error` : ''].filter(Boolean).join(' ') || undefined;
+  return (
+    [p.hint ? `${id}-hint` : '', p.error || p.warning ? `${id}-error` : '']
+      .filter(Boolean)
+      .join(' ') || undefined
+  );
 }
 
 function Label({ id, label, optional }: { id: string; label: string; optional?: boolean }) {
   return (
     <label className="field-label" htmlFor={id}>
-      {label} {optional ? <span className="field-optional">(facultatif)</span> : <span className="field-required">*</span>}
+      {label}{' '}
+      {optional ? (
+        <span className="field-optional">(facultatif)</span>
+      ) : (
+        <span className="field-required">*</span>
+      )}
     </label>
   );
 }
@@ -90,7 +105,9 @@ export function TextAreaField(props: BaseProps & TextareaHTMLAttributes<HTMLText
   );
 }
 
-export function SelectField(props: BaseProps & SelectHTMLAttributes<HTMLSelectElement> & { children: ReactNode }) {
+export function SelectField(
+  props: BaseProps & SelectHTMLAttributes<HTMLSelectElement> & { children: ReactNode },
+) {
   const { label, optional, hint, error, warning, id: givenId, children, ...select } = props;
   const autoId = useId();
   const id = givenId ?? autoId;

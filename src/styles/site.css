@@ -26,7 +26,8 @@
 }
 
 .logo-accent {
-  color: var(--mango);
+  /* Orange foncé : contraste ≥ 4,5:1 sur fond crème (l'orange vif reste réservé aux aplats). */
+  color: var(--mango-text);
   margin-left: 2px;
 }
 
@@ -1073,7 +1074,7 @@
   font-size: clamp(4rem, 16vw, 8rem);
   font-weight: 900;
   line-height: 1;
-  color: var(--mango);
+  color: var(--mango-text);
   letter-spacing: -0.05em;
   margin-bottom: 8px;
 }

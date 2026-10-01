@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { PageList } from '../components/CatalogPreview';
+import { getEntitlements } from '../config/plans';
 import { Icon } from '../components/Icon';
 import { LIMITS } from '../core/defaults';
 import type { Density, ImageFit, Orientation, TemplateId } from '../core/types';
@@ -10,7 +11,11 @@ import { TextField, Toggle } from './fields';
 import { useCreator } from './state';
 import { usePreviewLayout } from './usePreviewLayout';
 
-const DENSITY_LABELS: Record<Density, string> = { large: 'Grands', medium: 'Moyens', small: 'Petits' };
+const DENSITY_LABELS: Record<Density, string> = {
+  large: 'Grands',
+  medium: 'Moyens',
+  small: 'Petits',
+};
 
 export function StepTemplate() {
   const { data, images, setSettings, setShop } = useCreator();
@@ -24,7 +29,11 @@ export function StepTemplate() {
       TEMPLATES.map((t) => {
         const result = layoutCatalog(
           { ...data, settings: { ...s, templateId: t.id, orientation: 'portrait' } },
-          { availableImages: new Set(images.keys()), watermark: null, maxProducts: 12 },
+          {
+            availableImages: new Set(images.keys()),
+            watermark: null,
+            maxProducts: getEntitlements().maxProductsPerExport,
+          },
         );
         return { template: t, layout: result.layout };
       }),
@@ -38,7 +47,10 @@ export function StepTemplate() {
     <div className="step-body">
       <div className="step-intro">
         <h2>Choisissez un modèle</h2>
-        <p>Chaque modèle a sa propre mise en page. Vous pouvez en changer à tout moment : vos produits sont conservés.</p>
+        <p>
+          Chaque modèle a sa propre mise en page. Vous pouvez en changer à tout moment : vos
+          produits sont conservés.
+        </p>
       </div>
 
       <div className="template-choices" role="radiogroup" aria-label="Modèles de catalogue">
@@ -120,7 +132,10 @@ export function StepTemplate() {
             <ColorPicker
               value={data.shop.primaryColor}
               onChange={(primaryColor) => setShop({ primaryColor })}
-              recommended={{ hex: current.recommendedColor, label: `Couleur conseillée pour « ${current.name} »` }}
+              recommended={{
+                hex: current.recommendedColor,
+                label: `Couleur conseillée pour « ${current.name} »`,
+              }}
             />
             <TextField
               label="Titre de la couverture"
@@ -208,7 +223,9 @@ export function StepTemplate() {
               className="live-pages"
             />
           ) : (
-            <p className="field-hint">L’aperçu apparaîtra dès qu’un produit complet (nom et prix) sera ajouté.</p>
+            <p className="field-hint">
+              L’aperçu apparaîtra dès qu’un produit complet (nom et prix) sera ajouté.
+            </p>
           )}
         </aside>
       </div>

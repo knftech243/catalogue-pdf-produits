@@ -15,10 +15,17 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BASE_URL || 'http://localhost:4173';
 const outRoot = join(root, 'marketing', 'demos');
 
-const vite = await createServer({ root, logLevel: 'error', server: { middlewareMode: true, watch: null }, appType: 'custom' });
+const vite = await createServer({
+  root,
+  logLevel: 'error',
+  server: { middlewareMode: true, watch: null },
+  appType: 'custom',
+});
 const { DEMO_SHOPS } = await vite.ssrLoadModule('/src/demo/shops.ts');
 const { illustrationSvg } = await vite.ssrLoadModule('/src/demo/illustrations.ts');
-const { renderDemoPageSvg, demoPageCount } = await vite.ssrLoadModule('/src/demo/renderDemoPage.tsx');
+const { renderDemoPageSvg, demoPageCount } = await vite.ssrLoadModule(
+  '/src/demo/renderDemoPage.tsx',
+);
 const { slugify } = await vite.ssrLoadModule('/src/core/text.ts');
 const { TEMPLATE_META } = await vite.ssrLoadModule('/src/pdf/layout/meta.ts');
 
@@ -43,7 +50,11 @@ try {
     }));
     writeFileSync(
       join(dir, 'produits.json'),
-      JSON.stringify({ boutique: demo.shop, modele: demo.settings.templateId, produits: products }, null, 2) + '\n',
+      JSON.stringify(
+        { boutique: demo.shop, modele: demo.settings.templateId, produits: products },
+        null,
+        2,
+      ) + '\n',
     );
 
     // 2. Visuels produits (illustrations vectorielles libres de droits, créées pour le projet).
@@ -53,17 +64,27 @@ try {
     });
 
     // 3. Aperçus PNG des pages (même moteur que le PDF).
-    const tab = await browser.newPage({ viewport: { width: 595, height: 842 }, deviceScaleFactor: 2 });
+    const tab = await browser.newPage({
+      viewport: { width: 595, height: 842 },
+      deviceScaleFactor: 2,
+    });
     const pages = demoPageCount(demo.id);
     for (let i = 0; i < Math.min(pages, 2); i++) {
-      await tab.setContent(`<!doctype html><body style="margin:0">${renderDemoPageSvg(demo.id, i)}</body>`);
+      await tab.setContent(
+        `<!doctype html><body style="margin:0">${renderDemoPageSvg(demo.id, i)}</body>`,
+      );
       await tab.waitForTimeout(150);
-      await tab.screenshot({ path: join(dir, i === 0 ? 'apercu-couverture.png' : `apercu-page-${i + 1}.png`) });
+      await tab.screenshot({
+        path: join(dir, i === 0 ? 'apercu-couverture.png' : `apercu-page-${i + 1}.png`),
+      });
     }
     await tab.close();
 
     // 4. Vrai PDF généré par l'application (parcours utilisateur complet).
-    const context = await browser.newContext({ acceptDownloads: true, viewport: { width: 1280, height: 900 } });
+    const context = await browser.newContext({
+      acceptDownloads: true,
+      viewport: { width: 1280, height: 900 },
+    });
     const page = await context.newPage();
     await page.goto(`${BASE}/creer?exemple=${demo.id}`);
     await page.getByRole('heading', { name: 'Vos produits' }).waitFor({ timeout: 60000 });

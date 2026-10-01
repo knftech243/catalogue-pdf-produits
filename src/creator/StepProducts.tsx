@@ -38,7 +38,8 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
   } = useCreator();
   const [editing, setEditing] = useState<Product | null>(null);
   const [editorOpen, setEditorOpen] = useState(false);
-  const [filter, setFilter] = useState<string | null>(null);
+  const [selectedFilter, setFilter] = useState<string | null>(null);
+  const [editorKey, setEditorKey] = useState(0);
   const [bulk, setBulk] = useState<{ done: number; total: number } | null>(null);
   const [bulkErrors, setBulkErrors] = useState<string[]>([]);
   const bulkRef = useRef<HTMLInputElement>(null);
@@ -58,9 +59,8 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
   }, [data.products]);
 
   // Si la catégorie filtrée disparaît, on revient à « Toutes ».
-  useEffect(() => {
-    if (filter && !categories.some(([c]) => c === filter)) setFilter(null);
-  }, [categories, filter]);
+  const filter =
+    selectedFilter && categories.some(([c]) => c === selectedFilter) ? selectedFilter : null;
 
   // L'annulation de suppression reste proposée quelques secondes.
   useEffect(() => {
@@ -76,11 +76,13 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
 
   const openNew = () => {
     setEditing(null);
+    setEditorKey((k) => k + 1);
     setEditorOpen(true);
   };
 
   const openEdit = (p: Product) => {
     setEditing(p);
+    setEditorKey((k) => k + 1);
     setEditorOpen(true);
   };
 
@@ -89,7 +91,10 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
     const room = LIMITS.maxProductsInEditor - data.products.length;
     const list = [...files].slice(0, Math.max(0, room));
     const errors: string[] = [];
-    if (files.length > list.length) errors.push(`Limite de ${LIMITS.maxProductsInEditor} produits atteinte : ${files.length - list.length} photo(s) ignorée(s).`);
+    if (files.length > list.length)
+      errors.push(
+        `Limite de ${LIMITS.maxProductsInEditor} produits atteinte : ${files.length - list.length} photo(s) ignorée(s).`,
+      );
     setBulk({ done: 0, total: list.length });
     setBulkErrors([]);
     const created: Product[] = [];
@@ -100,7 +105,11 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
         await addImage({ id, ...processed });
         created.push({ ...createEmptyProduct(), imageId: id });
       } catch (e) {
-        errors.push(e instanceof ImageImportError ? e.message : `« ${list[i].name} » n’a pas pu être importée.`);
+        errors.push(
+          e instanceof ImageImportError
+            ? e.message
+            : `« ${list[i].name} » n’a pas pu être importée.`,
+        );
       }
       setBulk({ done: i + 1, total: list.length });
     }
@@ -129,7 +138,9 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
     moveProduct(p.id, delta);
     announce(delta < 0 ? 'Produit déplacé vers le haut.' : 'Produit déplacé vers le bas.');
     // Garde le focus sur le même bouton après le déplacement.
-    requestAnimationFrame(() => document.getElementById(`move-${delta < 0 ? 'up' : 'down'}-${p.id}`)?.focus());
+    requestAnimationFrame(() =>
+      document.getElementById(`move-${delta < 0 ? 'up' : 'down'}-${p.id}`)?.focus(),
+    );
   };
 
   const atLimit = data.products.length >= LIMITS.maxProductsInEditor;
@@ -140,13 +151,18 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
       <div className="step-intro">
         <h2>Vos produits</h2>
         <p>
-          Ajoutez chaque produit avec sa photo, son nom et son prix. Astuce : ajoutez plusieurs photos d’un coup, puis
-          complétez les prix.
+          Ajoutez chaque produit avec sa photo, son nom et son prix. Astuce : ajoutez plusieurs
+          photos d’un coup, puis complétez les prix.
         </p>
       </div>
 
       <div className="product-actions">
-        <button type="button" className="btn btn-primary" onClick={openNew} disabled={atLimit || !!bulk}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={openNew}
+          disabled={atLimit || !!bulk}
+        >
           <Icon name="plus" /> Ajouter un produit
         </button>
         <input
@@ -159,7 +175,12 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
           aria-label="Choisir plusieurs photos de produits"
           onChange={(e) => onBulk(e.target.files)}
         />
-        <button type="button" className="btn" onClick={() => bulkRef.current?.click()} disabled={atLimit || !!bulk}>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => bulkRef.current?.click()}
+          disabled={atLimit || !!bulk}
+        >
           <Icon name="images" /> Ajouter plusieurs photos
         </button>
         <button type="button" className="btn btn-ghost" onClick={onOpenDemo} disabled={!!bulk}>
@@ -175,7 +196,10 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
               Optimisation des photos : {bulk.done} sur {bulk.total}…
             </p>
             <div className="progress" aria-hidden="true">
-              <div className="progress-bar" style={{ width: `${(bulk.done / Math.max(1, bulk.total)) * 100}%` }} />
+              <div
+                className="progress-bar"
+                style={{ width: `${(bulk.done / Math.max(1, bulk.total)) * 100}%` }}
+              />
             </div>
           </div>
         </div>
@@ -193,7 +217,11 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
                 <li key={i}>{e}</li>
               ))}
             </ul>
-            <button type="button" className="btn btn-sm btn-ghost" onClick={() => setBulkErrors([])}>
+            <button
+              type="button"
+              className="btn btn-sm btn-ghost"
+              onClick={() => setBulkErrors([])}
+            >
               Fermer ce message
             </button>
           </div>
@@ -217,7 +245,10 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
             <Icon name="box" size={36} />
           </div>
           <h3>Aucun produit pour l’instant</h3>
-          <p>Commencez par un premier produit, ou chargez une boutique exemple pour découvrir l’outil.</p>
+          <p>
+            Commencez par un premier produit, ou chargez une boutique exemple pour découvrir
+            l’outil.
+          </p>
         </div>
       ) : (
         <>
@@ -227,9 +258,7 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
                 {stats.total} produit{stats.total > 1 ? 's' : ''}
               </strong>
               {stats.incomplete > 0 && (
-                <span className="badge badge-warning">
-                  {stats.incomplete} à compléter
-                </span>
+                <span className="badge badge-warning">{stats.incomplete} à compléter</span>
               )}
             </p>
             <label className="sort-control">
@@ -253,8 +282,8 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
             <p className="notice notice-warning">
               <Icon name="alert" />
               <span>
-                Les produits sans nom ou sans prix ne seront pas dans le catalogue. Touchez « Compléter » pour les
-                terminer.
+                Les produits sans nom ou sans prix ne seront pas dans le catalogue. Touchez «
+                Compléter » pour les terminer.
               </span>
             </p>
           )}
@@ -263,19 +292,30 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
             <p className="notice">
               <Icon name="info" />
               <span>
-                L’export gratuit contient les {rights.maxProductsPerExport} premiers produits. Les suivants restent
-                enregistrés dans l’outil.
+                L’export gratuit contient les {rights.maxProductsPerExport} premiers produits. Les
+                suivants restent enregistrés dans l’outil.
               </span>
             </p>
           )}
 
           {categories.length > 1 && (
             <div className="chips" role="group" aria-label="Filtrer par catégorie">
-              <button type="button" className="chip" aria-pressed={filter === null} onClick={() => setFilter(null)}>
+              <button
+                type="button"
+                className="chip"
+                aria-pressed={filter === null}
+                onClick={() => setFilter(null)}
+              >
                 Toutes ({data.products.length})
               </button>
               {categories.map(([c, n]) => (
-                <button key={c} type="button" className="chip" aria-pressed={filter === c} onClick={() => setFilter(c)}>
+                <button
+                  key={c}
+                  type="button"
+                  className="chip"
+                  aria-pressed={filter === c}
+                  onClick={() => setFilter(c)}
+                >
                   {c} ({n})
                 </button>
               ))}
@@ -283,7 +323,9 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
           )}
 
           {sort !== 'manual' && (
-            <p className="field-hint">Tri automatique actif : choisissez « Ordre manuel » pour déplacer les produits.</p>
+            <p className="field-hint">
+              Tri automatique actif : choisissez « Ordre manuel » pour déplacer les produits.
+            </p>
           )}
 
           <ol className="product-list">
@@ -295,10 +337,16 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
                 <li key={p.id} className={`product-row${incomplete ? ' is-incomplete' : ''}`}>
                   <button type="button" className="product-main" onClick={() => openEdit(p)}>
                     <span className="product-thumb">
-                      {thumb ? <img src={thumb} alt="" loading="lazy" decoding="async" /> : <Icon name="image" />}
+                      {thumb ? (
+                        <img src={thumb} alt="" loading="lazy" decoding="async" />
+                      ) : (
+                        <Icon name="image" />
+                      )}
                     </span>
                     <span className="product-info">
-                      <span className="product-name">{p.name.trim() || <em>Produit sans nom</em>}</span>
+                      <span className="product-name">
+                        {p.name.trim() || <em>Produit sans nom</em>}
+                      </span>
                       <span className="product-meta">
                         {p.price != null ? (
                           <span className="product-price">{formatPrice(p.price, currency)}</span>
@@ -310,11 +358,19 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
                       </span>
                     </span>
                     <span className="product-edit-hint">
-                      {incomplete ? <span className="badge badge-warning">Compléter</span> : <Icon name="edit" size={18} />}
+                      {incomplete ? (
+                        <span className="badge badge-warning">Compléter</span>
+                      ) : (
+                        <Icon name="edit" size={18} />
+                      )}
                       <span className="visually-hidden">Modifier {p.name || 'ce produit'}</span>
                     </span>
                   </button>
-                  <div className="product-tools" role="group" aria-label={`Actions pour ${p.name || 'ce produit'}`}>
+                  <div
+                    className="product-tools"
+                    role="group"
+                    aria-label={`Actions pour ${p.name || 'ce produit'}`}
+                  >
                     <button
                       type="button"
                       className="icon-btn"
@@ -337,11 +393,22 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
                       <Icon name="chevronDown" />
                       <span className="visually-hidden">Descendre {p.name}</span>
                     </button>
-                    <button type="button" className="icon-btn" onClick={() => duplicate(p)} disabled={atLimit} title="Dupliquer">
+                    <button
+                      type="button"
+                      className="icon-btn"
+                      onClick={() => duplicate(p)}
+                      disabled={atLimit}
+                      title="Dupliquer"
+                    >
                       <Icon name="copy" />
                       <span className="visually-hidden">Dupliquer {p.name}</span>
                     </button>
-                    <button type="button" className="icon-btn icon-btn-danger" onClick={() => remove(p)} title="Supprimer">
+                    <button
+                      type="button"
+                      className="icon-btn icon-btn-danger"
+                      onClick={() => remove(p)}
+                      title="Supprimer"
+                    >
                       <Icon name="trash" />
                       <span className="visually-hidden">Supprimer {p.name}</span>
                     </button>
@@ -363,6 +430,7 @@ export function StepProducts({ onOpenDemo, announce, showErrors }: Props) {
       )}
 
       <ProductEditor
+        key={editorKey}
         open={editorOpen}
         product={editing}
         onClose={() => setEditorOpen(false)}

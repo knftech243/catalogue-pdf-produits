@@ -24,12 +24,13 @@ export function ExamplesPage() {
           <p className="eyebrow">Exemples</p>
           <h1>Des catalogues PDF prêts à partager</h1>
           <p className="lead">
-            Voici quatre boutiques fictives créées avec Catalogue Express. Les aperçus ci-dessous sont calculés avec le
-            même moteur que le fichier PDF : ce que vous voyez est ce que vous téléchargez.
+            Voici quatre boutiques fictives créées avec Catalogue Express. Les aperçus ci-dessous
+            sont calculés avec le même moteur que le fichier PDF : ce que vous voyez est ce que vous
+            téléchargez.
           </p>
           <p className="small-note">
-            <Icon name="info" size={18} /> Illustrations dessinées pour la démonstration. Le PDF gratuit comporte une
-            mention discrète « version démo ».
+            <Icon name="info" size={18} /> Illustrations dessinées pour la démonstration. Le PDF
+            gratuit comporte une mention discrète « version démo ».
           </p>
         </div>
       </section>
@@ -38,7 +39,11 @@ export function ExamplesPage() {
         const template = TEMPLATE_META[demo.settings.templateId];
         const currency = CURRENCIES.find((c) => c.code === demo.shop.currency.code);
         return (
-          <section key={demo.id} className={`section example-section${index % 2 ? ' alt' : ''}`} aria-labelledby={`ex-${demo.id}`}>
+          <section
+            key={demo.id}
+            className={`section example-section${index % 2 ? ' alt' : ''}`}
+            aria-labelledby={`ex-${demo.id}`}
+          >
             <div className="container example-grid">
               <div className="example-text">
                 <p className="eyebrow">{demo.sector}</p>
@@ -70,7 +75,9 @@ export function ExamplesPage() {
       <section className="section cta-band">
         <div className="container narrow center">
           <h2>À vous de jouer</h2>
-          <p className="lead">Ajoutez vos propres photos et vos prix : votre catalogue est prêt en quelques minutes.</p>
+          <p className="lead">
+            Ajoutez vos propres photos et vos prix : votre catalogue est prêt en quelques minutes.
+          </p>
           <Link to="/creer" className="btn btn-primary btn-lg">
             Créer mon catalogue gratuitement
           </Link>

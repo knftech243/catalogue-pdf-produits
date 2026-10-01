@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, type ComponentType } from 'react';
+import { lazy, Suspense, useEffect, useSyncExternalStore, type ComponentType } from 'react';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { ContactPage } from './pages/ContactPage';
@@ -27,6 +27,21 @@ function CreatorFallback() {
   );
 }
 
+const noop = () => () => {};
+
+/**
+ * Faux pendant le pré-rendu et la toute première hydratation, vrai ensuite.
+ * L'outil (chargé à la demande) n'est jamais rendu côté serveur : le HTML pré-rendu de /creer
+ * contient l'écran de chargement, identique au premier rendu du navigateur (pas d'erreur d'hydratation).
+ */
+function useHydrated(): boolean {
+  return useSyncExternalStore(
+    noop,
+    () => true,
+    () => false,
+  );
+}
+
 const PAGES: Record<string, ComponentType> = {
   '/': HomePage,
   '/modeles': TemplatesPage,
@@ -43,6 +58,7 @@ const PAGES: Record<string, ComponentType> = {
 function Routes() {
   const { path } = useRouter();
   const route = findRoute(path) ?? NOT_FOUND_ROUTE;
+  const hydrated = useHydrated();
 
   useEffect(() => {
     applyHead(route);
@@ -50,10 +66,12 @@ function Routes() {
 
   let content;
   if (path === '/creer') {
-    content = (
+    content = hydrated ? (
       <Suspense fallback={<CreatorFallback />}>
         <CreatorPage />
       </Suspense>
+    ) : (
+      <CreatorFallback />
     );
   } else {
     const Page = PAGES[path] ?? NotFoundPage;

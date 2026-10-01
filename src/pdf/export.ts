@@ -60,7 +60,9 @@ async function decode(blob: Blob): Promise<ImageBitmap | HTMLImageElement> {
 }
 
 function sourceSize(src: ImageBitmap | HTMLImageElement) {
-  return 'naturalWidth' in src ? { w: src.naturalWidth, h: src.naturalHeight } : { w: src.width, h: src.height };
+  return 'naturalWidth' in src
+    ? { w: src.naturalWidth, h: src.naturalHeight }
+    : { w: src.width, h: src.height };
 }
 
 function canvasToBytes(canvas: HTMLCanvasElement): Promise<Uint8Array> {
@@ -149,7 +151,8 @@ export async function generateCatalogPdf(options: ExportOptions): Promise<Export
 
   report('layout', 2, 'Mise en page du catalogue…');
   const availableImages = new Set<string>();
-  for (const p of data.products) if (p.imageId && getImageBlob(p.imageId)) availableImages.add(p.imageId);
+  for (const p of data.products)
+    if (p.imageId && getImageBlob(p.imageId)) availableImages.add(p.imageId);
   if (data.shop.logoId && getImageBlob(data.shop.logoId)) availableImages.add(data.shop.logoId);
 
   const result = layoutCatalog(data, {
@@ -178,14 +181,21 @@ export async function generateCatalogPdf(options: ExportOptions): Promise<Export
   for (let i = 0; i < ids.length; i++) {
     checkAbort();
     const id = ids[i];
-    report('images', 5 + (i / Math.max(1, ids.length)) * 65, `Préparation des photos (${i + 1} sur ${ids.length})…`);
+    report(
+      'images',
+      5 + (i / Math.max(1, ids.length)) * 65,
+      `Préparation des photos (${i + 1} sur ${ids.length})…`,
+    );
     const blob = getImageBlob(id);
     if (!blob) continue;
     let src: ImageBitmap | HTMLImageElement | null = null;
     try {
       src = await decode(blob);
       for (const op of imageOps.get(id)!) {
-        prepared.set(imageKey(op), { data: await composeImage(src, op, rights.imageDpi), format: 'JPEG' });
+        prepared.set(imageKey(op), {
+          data: await composeImage(src, op, rights.imageDpi),
+          format: 'JPEG',
+        });
       }
     } catch {
       // Photo illisible : un emplacement neutre sera dessiné à la place, le PDF reste utilisable.
@@ -214,7 +224,12 @@ export async function generateCatalogPdf(options: ExportOptions): Promise<Export
     doc,
     layout,
     async (_op, key) => prepared.get(key) ?? null,
-    ({ page, totalPages }) => report('pages', 72 + (page / totalPages) * 22, `Création des pages (${page} sur ${totalPages})…`),
+    ({ page, totalPages }) =>
+      report(
+        'pages',
+        72 + (page / totalPages) * 22,
+        `Création des pages (${page} sur ${totalPages})…`,
+      ),
     signal,
   );
 

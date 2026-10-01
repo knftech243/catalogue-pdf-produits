@@ -6,7 +6,19 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist', 'dist-ssr', 'node_modules', 'test-results', 'playwright-report'] },
+  {
+    ignores: [
+      'dist',
+      'dist-ssr',
+      'node_modules',
+      'test-results',
+      'playwright-report',
+      '.tmp',
+      'public',
+      'marketing',
+      'src/pdf/fontMetrics.ts',
+    ],
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -23,6 +35,8 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       ...jsxA11y.flatConfigs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      // Libellés de cases à cocher composés (input + titre + aide) : texte jusqu'à 3 niveaux.
+      'jsx-a11y/label-has-associated-control': ['error', { depth: 3 }],
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },

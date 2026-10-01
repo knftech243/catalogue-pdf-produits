@@ -20,13 +20,23 @@ export function StepShop({ showErrors }: { showErrors: boolean }) {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const nameError = showErrors && !shop.name.trim() ? 'Indiquez le nom de votre boutique.' : null;
-  const emailWarning = shop.email.trim() && !isValidEmail(shop.email) ? 'Cette adresse e-mail semble incomplète (exemple : nom@gmail.com).' : null;
+  const emailWarning =
+    shop.email.trim() && !isValidEmail(shop.email)
+      ? 'Cette adresse e-mail semble incomplète (exemple : nom@gmail.com).'
+      : null;
   const waWarning =
     shop.whatsapp.trim() && !whatsappDigits(shop.whatsapp)
       ? 'Ajoutez l’indicatif du pays pour activer les liens WhatsApp dans le PDF (exemple : +243 81 234 5678).'
       : null;
 
-  const hasContent = [shop.name, shop.slogan, shop.whatsapp, shop.phone, shop.email, shop.address].some((v) => v.trim());
+  const hasContent = [
+    shop.name,
+    shop.slogan,
+    shop.whatsapp,
+    shop.phone,
+    shop.email,
+    shop.address,
+  ].some((v) => v.trim());
 
   const applySample = () => {
     const sample = sampleShopInfo();
@@ -44,7 +54,11 @@ export function StepShop({ showErrors }: { showErrors: boolean }) {
       await addImage({ id, ...processed });
       setShop({ logoId: id });
     } catch (e) {
-      setLogoError(e instanceof ImageImportError ? e.message : 'Impossible d’utiliser ce logo. Essayez une autre image.');
+      setLogoError(
+        e instanceof ImageImportError
+          ? e.message
+          : 'Impossible d’utiliser ce logo. Essayez une autre image.',
+      );
     } finally {
       setLogoBusy(false);
       if (fileRef.current) fileRef.current.value = '';
@@ -52,14 +66,21 @@ export function StepShop({ showErrors }: { showErrors: boolean }) {
   };
 
   const logo = shop.logoId ? images.get(shop.logoId) : undefined;
-  const currencyExample = formatPrice(12500, shop.currency).replace(/ /g, ' ');
+  const currencyExample = formatPrice(12500, shop.currency).replace(/\u00A0/g, ' ');
 
   return (
     <div className="step-body">
       <div className="step-intro">
         <h2>Votre boutique</h2>
-        <p>Ces informations apparaissent sur la couverture et en bas de chaque page. Seul le nom est obligatoire.</p>
-        <button type="button" className="btn btn-sm" onClick={() => (hasContent ? setConfirmSample(true) : applySample())}>
+        <p>
+          Ces informations apparaissent sur la couverture et en bas de chaque page. Seul le nom est
+          obligatoire.
+        </p>
+        <button
+          type="button"
+          className="btn btn-sm"
+          onClick={() => (hasContent ? setConfirmSample(true) : applySample())}
+        >
           <Icon name="sparkles" /> Utiliser des données d’exemple
         </button>
       </div>
@@ -170,7 +191,9 @@ export function StepShop({ showErrors }: { showErrors: boolean }) {
           <SelectField
             label="Devise"
             value={shop.currency.code}
-            onChange={(e) => setShop({ currency: { ...shop.currency, code: e.target.value as CurrencyCode } })}
+            onChange={(e) =>
+              setShop({ currency: { ...shop.currency, code: e.target.value as CurrencyCode } })
+            }
             hint={`Exemple d’affichage : ${currencyExample}`}
           >
             {CURRENCIES.map((c) => (
@@ -184,16 +207,27 @@ export function StepShop({ showErrors }: { showErrors: boolean }) {
               <TextField
                 label="Symbole"
                 value={shop.currency.customSymbol}
-                onChange={(e) => setShop({ currency: { ...shop.currency, customSymbol: e.target.value } })}
+                onChange={(e) =>
+                  setShop({ currency: { ...shop.currency, customSymbol: e.target.value } })
+                }
                 placeholder="Ex. : GNF"
                 maxLength={8}
-                error={showErrors && !shop.currency.customSymbol.trim() ? 'Indiquez le symbole de la devise.' : null}
+                error={
+                  showErrors && !shop.currency.customSymbol.trim()
+                    ? 'Indiquez le symbole de la devise.'
+                    : null
+                }
               />
               <SelectField
                 label="Position"
                 value={shop.currency.customPosition}
                 onChange={(e) =>
-                  setShop({ currency: { ...shop.currency, customPosition: e.target.value as 'before' | 'after' } })
+                  setShop({
+                    currency: {
+                      ...shop.currency,
+                      customPosition: e.target.value as 'before' | 'after',
+                    },
+                  })
                 }
               >
                 <option value="after">Après le prix (12 500 GNF)</option>
@@ -203,7 +237,10 @@ export function StepShop({ showErrors }: { showErrors: boolean }) {
           )}
         </div>
 
-        <ColorPicker value={shop.primaryColor} onChange={(primaryColor) => setShop({ primaryColor })} />
+        <ColorPicker
+          value={shop.primaryColor}
+          onChange={(primaryColor) => setShop({ primaryColor })}
+        />
 
         <div className="field logo-field">
           <span className="field-label" id="logo-label">
@@ -211,7 +248,11 @@ export function StepShop({ showErrors }: { showErrors: boolean }) {
           </span>
           <div className="logo-row">
             <div className="logo-preview" aria-hidden={!logo}>
-              {logo ? <img src={logo.thumbUrl} alt="Logo de la boutique" /> : <Icon name="image" size={28} />}
+              {logo ? (
+                <img src={logo.thumbUrl} alt="Logo de la boutique" />
+              ) : (
+                <Icon name="image" size={28} />
+              )}
             </div>
             <div className="logo-actions">
               <input
@@ -223,18 +264,33 @@ export function StepShop({ showErrors }: { showErrors: boolean }) {
                 aria-labelledby="logo-label"
                 onChange={(e) => onLogo(e.target.files?.[0])}
               />
-              <button type="button" className="btn btn-sm" onClick={() => fileRef.current?.click()} disabled={logoBusy}>
-                {logoBusy ? <span className="spinner" aria-hidden="true" /> : <Icon name="upload" />}
+              <button
+                type="button"
+                className="btn btn-sm"
+                onClick={() => fileRef.current?.click()}
+                disabled={logoBusy}
+              >
+                {logoBusy ? (
+                  <span className="spinner" aria-hidden="true" />
+                ) : (
+                  <Icon name="upload" />
+                )}
                 {logo ? 'Changer le logo' : 'Ajouter un logo'}
               </button>
               {logo && (
-                <button type="button" className="btn btn-sm btn-ghost" onClick={() => setShop({ logoId: null })}>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-ghost"
+                  onClick={() => setShop({ logoId: null })}
+                >
                   <Icon name="trash" /> Retirer
                 </button>
               )}
             </div>
           </div>
-          <p className="field-hint">PNG avec fond transparent conseillé. Le logo apparaît sur la couverture.</p>
+          <p className="field-hint">
+            PNG avec fond transparent conseillé. Le logo apparaît sur la couverture.
+          </p>
           {logoError && (
             <p className="field-error" role="alert">
               <Icon name="alert" size={16} /> {logoError}
@@ -246,7 +302,12 @@ export function StepShop({ showErrors }: { showErrors: boolean }) {
       <ConfirmDialog
         open={confirmSample}
         title="Remplacer les informations ?"
-        message={<p>Les informations de votre boutique seront remplacées par une boutique fictive d’exemple. Vos produits ne sont pas modifiés.</p>}
+        message={
+          <p>
+            Les informations de votre boutique seront remplacées par une boutique fictive d’exemple.
+            Vos produits ne sont pas modifiés.
+          </p>
+        }
         confirmLabel="Remplacer"
         onConfirm={applySample}
         onCancel={() => setConfirmSample(false)}

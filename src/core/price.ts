@@ -1,6 +1,6 @@
 import type { CurrencyCode, CurrencySettings } from './types';
 
-const NBSP = ' ';
+const NBSP = '\u00A0';
 
 export interface CurrencyOption {
   code: CurrencyCode;
@@ -49,7 +49,10 @@ export function parsePrice(input: string): number | null {
     } else {
       const decimals = parts[1] ?? '';
       // « 12.500 » ou « 1,250 » : trois chiffres après un séparateur unique = milliers.
-      normalized = decimals.length === 3 && parts[0] !== '' && parts[0] !== '0' ? parts.join('') : parts.join('.');
+      normalized =
+        decimals.length === 3 && parts[0] !== '' && parts[0] !== '0'
+          ? parts.join('')
+          : parts.join('.');
     }
   } else {
     normalized = cleaned;

@@ -82,12 +82,18 @@ async function decodeFile(file: Blob): Promise<ImageBitmap | HTMLImageElement> {
 }
 
 function size(src: ImageBitmap | HTMLImageElement) {
-  return 'naturalWidth' in src ? { w: src.naturalWidth, h: src.naturalHeight } : { w: src.width, h: src.height };
+  return 'naturalWidth' in src
+    ? { w: src.naturalWidth, h: src.naturalHeight }
+    : { w: src.width, h: src.height };
 }
 
 function toBlob(canvas: HTMLCanvasElement, type: string, quality?: number): Promise<Blob> {
   return new Promise((resolve, reject) =>
-    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Conversion impossible'))), type, quality),
+    canvas.toBlob(
+      (b) => (b ? resolve(b) : reject(new Error('Conversion impossible'))),
+      type,
+      quality,
+    ),
   );
 }
 
@@ -137,7 +143,10 @@ async function render(
 }
 
 /** Importe une photo : vérification, correction de l'orientation, réduction et compression. */
-export async function processImage(file: File, options: Options = PRODUCT_IMAGE): Promise<ProcessedImage> {
+export async function processImage(
+  file: File,
+  options: Options = PRODUCT_IMAGE,
+): Promise<ProcessedImage> {
   validateImageFile(file);
   let src: ImageBitmap | HTMLImageElement;
   try {
@@ -151,7 +160,10 @@ export async function processImage(file: File, options: Options = PRODUCT_IMAGE)
   try {
     const { w, h } = size(src);
     if (w < 16 || h < 16) {
-      throw new ImageImportError('tiny', `« ${file.name} » est trop petite (${w} × ${h} pixels) pour être utilisée.`);
+      throw new ImageImportError(
+        'tiny',
+        `« ${file.name} » est trop petite (${w} × ${h} pixels) pour être utilisée.`,
+      );
     }
     const main = await render(src, options.maxSide, options.keepTransparency, 0.86);
     const thumb = await render(src, options.thumbSide, options.keepTransparency, 0.78);

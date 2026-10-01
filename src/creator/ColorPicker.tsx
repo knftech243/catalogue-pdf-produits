@@ -52,14 +52,19 @@ export function ColorPicker({ value, onChange, recommended }: Props) {
         </label>
       </div>
       {recommended && value.toUpperCase() !== recommended.hex.toUpperCase() && (
-        <button type="button" className="btn btn-sm btn-ghost recommended-color" onClick={() => onChange(recommended.hex)}>
+        <button
+          type="button"
+          className="btn btn-sm btn-ghost recommended-color"
+          onClick={() => onChange(recommended.hex)}
+        >
           <span className="swatch" style={{ background: recommended.hex }} aria-hidden="true" />
           {recommended.label}
         </button>
       )}
       {lowContrast && (
         <p className="field-warning">
-          Couleur très claire : les textes de couleur seront automatiquement assombris pour rester lisibles.
+          Couleur très claire : les textes de couleur seront automatiquement assombris pour rester
+          lisibles.
         </p>
       )}
     </fieldset>

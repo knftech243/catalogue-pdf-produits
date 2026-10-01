@@ -5,7 +5,9 @@ import { chromium } from '@playwright/test';
 
 const [url, out, width = '1280', height = '900', full = '1'] = process.argv.slice(2);
 if (!url || !out) {
-  console.error('Usage : node scripts/qa-snap.mjs <url> <sortie.png> [largeur] [hauteur] [fullPage]');
+  console.error(
+    'Usage : node scripts/qa-snap.mjs <url> <sortie.png> [largeur] [hauteur] [fullPage]',
+  );
   process.exit(1);
 }
 

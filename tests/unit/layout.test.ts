@@ -11,19 +11,37 @@ const TEMPLATE_IDS = TEMPLATES.map((t) => t.id) as TemplateId[];
 const ORIENTATIONS: Orientation[] = ['portrait', 'landscape'];
 const DENSITIES: Density[] = ['large', 'medium', 'small'];
 
-function run(count: number, templateId: TemplateId, orientation: Orientation, density: Density = 'medium', extra = {}) {
+function run(
+  count: number,
+  templateId: TemplateId,
+  orientation: Orientation,
+  density: Density = 'medium',
+  extra = {},
+) {
   const data = makeCatalog(count);
   data.settings = { ...data.settings, templateId, orientation, density, ...extra };
-  return layoutCatalog(data, { availableImages: imageIds(data), watermark: null, maxProducts: 50, date: new Date(2026, 8, 30) });
+  return layoutCatalog(data, {
+    availableImages: imageIds(data),
+    watermark: null,
+    maxProducts: 50,
+    date: new Date(2026, 8, 30),
+  });
 }
 
 function textOps(layout: LayoutResult, page: number) {
-  return layout.pages[page].ops.filter((o): o is Extract<DrawOp, { kind: 'text' }> => o.kind === 'text');
+  return layout.pages[page].ops.filter(
+    (o): o is Extract<DrawOp, { kind: 'text' }> => o.kind === 'text',
+  );
 }
 
-function overlaps(a: { x: number; y: number; w: number; h: number }, b: { x: number; y: number; w: number; h: number }) {
+function overlaps(
+  a: { x: number; y: number; w: number; h: number },
+  b: { x: number; y: number; w: number; h: number },
+) {
   const eps = 0.5;
-  return a.x + a.w - eps > b.x && b.x + b.w - eps > a.x && a.y + a.h - eps > b.y && b.y + b.h - eps > a.y;
+  return (
+    a.x + a.w - eps > b.x && b.x + b.w - eps > a.x && a.y + a.h - eps > b.y && b.y + b.h - eps > a.y
+  );
 }
 
 describe.each(TEMPLATE_IDS)('modèle %s', (templateId) => {
@@ -55,7 +73,9 @@ describe.each(TEMPLATE_IDS)('modèle %s', (templateId) => {
     it('les fiches produits ne se chevauchent pas', () => {
       const { layout } = run(20, templateId, orientation);
       for (let i = 1; i < layout.pages.length; i++) {
-        const links = layout.pages[i].ops.filter((o) => o.kind === 'link' && o.url.includes('?text='));
+        const links = layout.pages[i].ops.filter(
+          (o) => o.kind === 'link' && o.url.includes('?text='),
+        );
         for (let a = 0; a < links.length; a++)
           for (let b = a + 1; b < links.length; b++) {
             expect(overlaps(links[a] as never, links[b] as never)).toBe(false);
@@ -83,7 +103,9 @@ describe.each(TEMPLATE_IDS)('modèle %s', (templateId) => {
   it('regroupe par catégorie avec des intertitres', () => {
     const { layout } = run(12, templateId, 'portrait', 'medium', { groupByCategory: true });
     const all = layout.pages.slice(1).flatMap((p) => p.ops);
-    const texts = all.filter((o) => o.kind === 'text').map((o) => (o as { text: string }).text.toUpperCase());
+    const texts = all
+      .filter((o) => o.kind === 'text')
+      .map((o) => (o as { text: string }).text.toUpperCase());
     for (const cat of ['ROBES', 'CHAUSSURES', 'ACCESSOIRES', 'BOISSONS']) {
       expect(texts.some((t) => t.includes(cat))).toBe(true);
     }
@@ -91,11 +113,17 @@ describe.each(TEMPLATE_IDS)('modèle %s', (templateId) => {
 
   it('gère un nom et une description très longs sans débordement', () => {
     const data = makeCatalog(3);
-    data.products[0].name = 'Ensemble traditionnel brodé main en tissu wax premium avec accessoires assortis pour cérémonie';
+    data.products[0].name =
+      'Ensemble traditionnel brodé main en tissu wax premium avec accessoires assortis pour cérémonie';
     data.products[0].description =
-      'Description très détaillée : '.repeat(12) + 'fin du texte qui ne doit jamais apparaître en entier dans la fiche.';
+      'Description très détaillée : '.repeat(12) +
+      'fin du texte qui ne doit jamais apparaître en entier dans la fiche.';
     data.settings.templateId = templateId;
-    const { layout } = layoutCatalog(data, { availableImages: imageIds(data), watermark: null, maxProducts: 50 });
+    const { layout } = layoutCatalog(data, {
+      availableImages: imageIds(data),
+      watermark: null,
+      maxProducts: 50,
+    });
     const texts = textOps(layout, 1).map((t) => t.text);
     expect(texts.some((t) => t.endsWith('…'))).toBe(true);
     expect(texts.some((t) => t.includes('fin du texte'))).toBe(false);
@@ -105,7 +133,11 @@ describe.each(TEMPLATE_IDS)('modèle %s', (templateId) => {
     const data = makeCatalog(2);
     data.settings.templateId = templateId;
     data.shop.currency = { code: 'CDF', customSymbol: '', customPosition: 'after' };
-    const { layout } = layoutCatalog(data, { availableImages: new Set(), watermark: null, maxProducts: 50 });
+    const { layout } = layoutCatalog(data, {
+      availableImages: new Set(),
+      watermark: null,
+      maxProducts: 50,
+    });
     const texts = textOps(layout, 1).map((t) => t.text);
     expect(texts.some((t) => t.endsWith('FC'))).toBe(true);
   });
@@ -113,7 +145,11 @@ describe.each(TEMPLATE_IDS)('modèle %s', (templateId) => {
   it('ajoute le filigrane de démonstration sur chaque page', () => {
     const data = makeCatalog(8);
     data.settings.templateId = templateId;
-    const { layout } = layoutCatalog(data, { availableImages: imageIds(data), watermark: 'VERSION DÉMO', maxProducts: 50 });
+    const { layout } = layoutCatalog(data, {
+      availableImages: imageIds(data),
+      watermark: 'VERSION DÉMO',
+      maxProducts: 50,
+    });
     for (const page of layout.pages) {
       expect(page.ops.some((o) => o.kind === 'text' && o.text === 'VERSION DÉMO')).toBe(true);
     }
@@ -124,10 +160,17 @@ describe.each(TEMPLATE_IDS)('modèle %s', (templateId) => {
     data.settings.templateId = templateId;
     data.settings.showContact = false;
     data.products = makeProducts(4, { imageId: null });
-    const { layout } = layoutCatalog(data, { availableImages: new Set(), watermark: null, maxProducts: 50 });
+    const { layout } = layoutCatalog(data, {
+      availableImages: new Set(),
+      watermark: null,
+      maxProducts: 50,
+    });
     expect(layout.pages.length).toBe(2);
     expect(layout.pages.flatMap((p) => p.ops).some((o) => o.kind === 'image')).toBe(false);
-    const texts = layout.pages.flatMap((p) => p.ops).filter((o) => o.kind === 'text').map((o) => (o as { text: string }).text);
+    const texts = layout.pages
+      .flatMap((p) => p.ops)
+      .filter((o) => o.kind === 'text')
+      .map((o) => (o as { text: string }).text);
     expect(texts.some((t) => t.includes('Photo à venir'))).toBe(true);
     expect(texts.some((t) => t.includes('test@example.com'))).toBe(false);
   });
@@ -136,7 +179,11 @@ describe.each(TEMPLATE_IDS)('modèle %s', (templateId) => {
     const data = makeCatalog(4);
     data.settings.templateId = templateId;
     data.shop.logoId = 'logo1';
-    const { layout } = layoutCatalog(data, { availableImages: imageIds(data), watermark: null, maxProducts: 50 });
+    const { layout } = layoutCatalog(data, {
+      availableImages: imageIds(data),
+      watermark: null,
+      maxProducts: 50,
+    });
     expect(layout.pages[0].ops.some((o) => o.kind === 'image' && o.imageId === 'logo1')).toBe(true);
   });
 });
@@ -146,14 +193,22 @@ describe('règles communes', () => {
     const data = makeCatalog(60);
     data.products[0].name = '';
     data.products[1].price = null;
-    const res = layoutCatalog(data, { availableImages: new Set(), watermark: null, maxProducts: 50 });
+    const res = layoutCatalog(data, {
+      availableImages: new Set(),
+      watermark: null,
+      maxProducts: 50,
+    });
     expect(res.incompleteCount).toBe(2);
     expect(res.productCount).toBe(50);
     expect(res.overLimitCount).toBe(8);
   });
 
   it('zéro produit : seulement la couverture', () => {
-    const res = layoutCatalog(makeCatalog(0), { availableImages: new Set(), watermark: null, maxProducts: 50 });
+    const res = layoutCatalog(makeCatalog(0), {
+      availableImages: new Set(),
+      watermark: null,
+      maxProducts: 50,
+    });
     expect(res.productCount).toBe(0);
     expect(res.layout.pages).toHaveLength(1);
   });
@@ -161,25 +216,47 @@ describe('règles communes', () => {
   it('trie par prix sans modifier l’ordre manuel', () => {
     const data = makeCatalog(5);
     data.settings.sort = 'price-desc';
-    const res = layoutCatalog(data, { availableImages: new Set(), watermark: null, maxProducts: 50 });
+    const res = layoutCatalog(data, {
+      availableImages: new Set(),
+      watermark: null,
+      maxProducts: 50,
+    });
     expect(res.productCount).toBe(5);
     expect(data.products[0].id).toBe('p1');
   });
 
   it('crée des liens WhatsApp avec message pour chaque produit', () => {
     const data = makeCatalog(3);
-    const { layout } = layoutCatalog(data, { availableImages: new Set(), watermark: null, maxProducts: 50 });
-    const links = layout.pages[1].ops.filter((o) => o.kind === 'link').map((o) => (o as { url: string }).url);
+    const { layout } = layoutCatalog(data, {
+      availableImages: new Set(),
+      watermark: null,
+      maxProducts: 50,
+    });
+    const links = layout.pages[1].ops
+      .filter((o) => o.kind === 'link')
+      .map((o) => (o as { url: string }).url);
     expect(links.filter((u) => u.startsWith('https://wa.me/243000000000?text='))).toHaveLength(3);
     data.settings.whatsappLinks = false;
-    const off = layoutCatalog(data, { availableImages: new Set(), watermark: null, maxProducts: 50 });
-    expect(off.layout.pages.flatMap((p) => p.ops).some((o) => o.kind === 'link' && o.url.includes('wa.me'))).toBe(false);
+    const off = layoutCatalog(data, {
+      availableImages: new Set(),
+      watermark: null,
+      maxProducts: 50,
+    });
+    expect(
+      off.layout.pages
+        .flatMap((p) => p.ops)
+        .some((o) => o.kind === 'link' && o.url.includes('wa.me')),
+    ).toBe(false);
   });
 
   it('retire les émojis et le signale', () => {
     const data = makeCatalog(1);
     data.products[0].name = 'Promo 🔥 robe';
-    const res = layoutCatalog(data, { availableImages: new Set(), watermark: null, maxProducts: 50 });
+    const res = layoutCatalog(data, {
+      availableImages: new Set(),
+      watermark: null,
+      maxProducts: 50,
+    });
     expect(res.removedCharacters).toBe(true);
   });
 });

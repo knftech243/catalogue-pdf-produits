@@ -16,9 +16,10 @@ export function StepExport() {
   const { data, images } = useCreator();
   const preview = usePreviewLayout(data, images, true);
   const rights = getEntitlements();
-  const [status, setStatus] = useState<Status>('idle');
+  const [rawStatus, setStatus] = useState<Status>('idle');
   const [progress, setProgress] = useState<ExportProgress | null>(null);
   const [result, setResult] = useState<ExportResult | null>(null);
+  const [generatedFor, setGeneratedFor] = useState<typeof data | null>(null);
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [premiumOpen, setPremiumOpen] = useState(false);
@@ -27,9 +28,7 @@ export function StepExport() {
   const resultRef = useRef<HTMLDivElement>(null);
 
   // Le PDF précédent devient obsolète dès que le catalogue change.
-  useEffect(() => {
-    setStatus((s) => (s === 'done' ? 'idle' : s));
-  }, [data]);
+  const status: Status = rawStatus === 'done' && generatedFor !== data ? 'idle' : rawStatus;
 
   useEffect(() => () => abortRef.current?.abort(), []);
   useEffect(
@@ -55,6 +54,7 @@ export function StepExport() {
         signal: controller.signal,
       });
       setResult(res);
+      setGeneratedFor(data);
       setUrl(URL.createObjectURL(res.blob));
       setStatus('done');
       requestAnimationFrame(() => resultRef.current?.focus());
@@ -78,7 +78,9 @@ export function StepExport() {
     typeof navigator !== 'undefined' &&
     !!result &&
     typeof navigator.canShare === 'function' &&
-    navigator.canShare({ files: [new File([result.blob], result.fileName, { type: 'application/pdf' })] });
+    navigator.canShare({
+      files: [new File([result.blob], result.fileName, { type: 'application/pdf' })],
+    });
 
   const share = async () => {
     if (!result) return;
@@ -90,7 +92,9 @@ export function StepExport() {
       });
     } catch (e) {
       if (e instanceof DOMException && e.name === 'AbortError') return;
-      setShareError('Le partage direct n’a pas fonctionné. Téléchargez le PDF, puis envoyez-le depuis WhatsApp.');
+      setShareError(
+        'Le partage direct n’a pas fonctionné. Téléchargez le PDF, puis envoyez-le depuis WhatsApp.',
+      );
     }
   };
 
@@ -101,7 +105,10 @@ export function StepExport() {
     <div className="step-body">
       <div className="step-intro">
         <h2>Télécharger votre catalogue</h2>
-        <p>Le PDF est fabriqué sur votre appareil, en quelques secondes. Rien n’est envoyé sur Internet.</p>
+        <p>
+          Le PDF est fabriqué sur votre appareil, en quelques secondes. Rien n’est envoyé sur
+          Internet.
+        </p>
       </div>
 
       <div className="export-grid">
@@ -109,11 +116,13 @@ export function StepExport() {
           <h3 id="export-title">Export de démonstration gratuit</h3>
           <ul className="check-list">
             <li>
-              <Icon name="check" /> {layout.productCount} produit{layout.productCount > 1 ? 's' : ''} ·{' '}
-              {layout.pages.length} page{layout.pages.length > 1 ? 's' : ''} · {template.name}
+              <Icon name="check" /> {layout.productCount} produit
+              {layout.productCount > 1 ? 's' : ''} · {layout.pages.length} page
+              {layout.pages.length > 1 ? 's' : ''} · {template.name}
             </li>
             <li>
-              <Icon name="check" /> Format A4 {data.settings.orientation === 'portrait' ? 'portrait' : 'paysage'}, texte net
+              <Icon name="check" /> Format A4{' '}
+              {data.settings.orientation === 'portrait' ? 'portrait' : 'paysage'}, texte net
             </li>
             <li>
               <Icon name="check" /> Mention « version démo » discrète en filigrane
@@ -128,7 +137,8 @@ export function StepExport() {
               <Icon name="info" />
               <span>
                 {preview.overLimitCount} produit{preview.overLimitCount > 1 ? 's' : ''} au-delà de{' '}
-                {rights.maxProductsPerExport} ne {preview.overLimitCount > 1 ? 'seront' : 'sera'} pas inclus.
+                {rights.maxProductsPerExport} ne {preview.overLimitCount > 1 ? 'seront' : 'sera'}{' '}
+                pas inclus.
               </span>
             </p>
           )}
@@ -164,7 +174,11 @@ export function StepExport() {
               >
                 <div className="progress-bar" style={{ width: `${progress.percent}%` }} />
               </div>
-              <button type="button" className="btn btn-sm btn-ghost" onClick={() => abortRef.current?.abort()}>
+              <button
+                type="button"
+                className="btn btn-sm btn-ghost"
+                onClick={() => abortRef.current?.abort()}
+              >
                 Annuler
               </button>
             </div>
@@ -201,7 +215,8 @@ export function StepExport() {
               {shareError && <p className="field-error">{shareError}</p>}
               {result.removedCharacters && (
                 <p className="field-hint">
-                  Certains caractères spéciaux (émojis…) ont été retirés car ils ne peuvent pas être imprimés dans le PDF.
+                  Certains caractères spéciaux (émojis…) ont été retirés car ils ne peuvent pas être
+                  imprimés dans le PDF.
                 </p>
               )}
             </div>
@@ -249,8 +264,8 @@ export function StepExport() {
         }
       >
         <p>
-          <strong>Le paiement n’est pas encore disponible.</strong> Aucun achat n’est possible pour le moment et aucune
-          somme ne vous sera demandée ici.
+          <strong>Le paiement n’est pas encore disponible.</strong> Aucun achat n’est possible pour
+          le moment et aucune somme ne vous sera demandée ici.
         </p>
         <p>L’offre Premium prévue comprendra :</p>
         <ul className="check-list">
@@ -266,7 +281,10 @@ export function StepExport() {
             <>
               {' '}
               Pour être prévenu du lancement, écrivez-nous à{' '}
-              <a href={`mailto:${SITE.contactEmail}?subject=Offre%20Premium`}>{SITE.contactEmail}</a>.
+              <a href={`mailto:${SITE.contactEmail}?subject=Offre%20Premium`}>
+                {SITE.contactEmail}
+              </a>
+              .
             </>
           ) : null}
         </p>
