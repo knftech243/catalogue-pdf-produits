@@ -17,7 +17,7 @@ Suivi de l'avancement. ✅ terminé · 🔄 en cours · ⏳ à faire
 | 11 | Tests unitaires (170) et navigateur (115 + 24 audits accessibilité) | ✅ |
 | 12 | Corrections issues des tests (mobile, sauvegarde, hydratation, contraste) | ✅ |
 | 13 | Documentation, dossier qualité, rapport final | ✅ |
-| 14 | Envoi sur GitHub (`knftech243/catalogue-pdf-produits`) | 🔄 |
+| 14 | Envoi sur GitHub (`knftech243/catalogue-pdf-produits`, branche `main`) | ✅ |
 
 ## Journal
 
