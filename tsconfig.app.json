@@ -17,7 +17,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "types": ["vite/client", "vitest/globals"]
+    "types": ["vite/client"]
   },
-  "include": ["src", "tests/unit"]
+  "include": ["src"]
 }
