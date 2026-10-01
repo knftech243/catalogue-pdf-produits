@@ -1,4 +1,4 @@
-import type { CatalogData, Density, Orientation, TemplateId } from '../../core/types';
+import type { CatalogData, TemplateId } from '../../core/types';
 import { prepareLayoutInput, type PrepareOptions, type PreparedInput } from '../prepare';
 import { beautyTemplate } from './templates/beauty';
 import { fashionTemplate } from './templates/fashion';
@@ -6,15 +6,12 @@ import { foodTemplate } from './templates/food';
 import { minimalTemplate } from './templates/minimal';
 import type { LayoutResult, TemplateDefinition } from './types';
 
+export { productsPerPage, TEMPLATE_META } from './meta';
+
 export const TEMPLATES: TemplateDefinition[] = [minimalTemplate, fashionTemplate, beautyTemplate, foodTemplate];
 
 export function getTemplate(id: TemplateId): TemplateDefinition {
   return TEMPLATES.find((t) => t.id === id) ?? minimalTemplate;
-}
-
-export function productsPerPage(id: TemplateId, orientation: Orientation, density: Density): number {
-  const g = getTemplate(id).grid(orientation, density);
-  return g.cols * g.rows;
 }
 
 export interface CatalogLayout extends Omit<PreparedInput, 'input'> {

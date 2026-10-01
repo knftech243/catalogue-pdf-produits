@@ -1,10 +1,5 @@
-// Affichage des pages d'un catalogue mis en page (aperçu à l'écran).
+// Affichage des pages d'un catalogue mis en page (aperçu à l'écran, dans l'outil de création).
 
-import { useMemo } from 'react';
-import { demoCatalog } from '../demo/catalog';
-import type { DemoId } from '../demo/shops';
-import type { Orientation, TemplateId } from '../core/types';
-import { layoutCatalog } from '../pdf/layout';
 import type { LayoutResult } from '../pdf/layout/types';
 import { SvgPage } from '../pdf/preview/SvgPage';
 
@@ -47,46 +42,5 @@ export function PageList({ layout, resolveImage, idPrefix, pages, shopName, clas
           </figure>
         ))}
     </div>
-  );
-}
-
-interface DemoPreviewProps {
-  demoId: DemoId;
-  templateId?: TemplateId;
-  orientation?: Orientation;
-  pages?: number[];
-  className?: string;
-}
-
-/** Aperçu d'un catalogue de démonstration, calculé avec le même moteur que le PDF. */
-export function DemoPreview({ demoId, templateId, orientation, pages = [0, 1], className }: DemoPreviewProps) {
-  const { layout, images, name } = useMemo(() => {
-    const demo = demoCatalog(demoId);
-    const data = {
-      ...demo.data,
-      settings: {
-        ...demo.data.settings,
-        ...(templateId ? { templateId } : {}),
-        ...(orientation ? { orientation } : {}),
-      },
-    };
-    const result = layoutCatalog(data, {
-      availableImages: new Set(demo.images.keys()),
-      watermark: null,
-      maxProducts: 200,
-      date: new Date(2026, 8, 1),
-    });
-    return { layout: result.layout, images: demo.images, name: demo.data.shop.name };
-  }, [demoId, templateId, orientation]);
-
-  return (
-    <PageList
-      layout={layout}
-      resolveImage={(id) => images.get(id)}
-      idPrefix={`demo-${demoId}-${templateId ?? 'd'}-${orientation ?? 'o'}`}
-      pages={pages}
-      shopName={name}
-      className={className}
-    />
   );
 }

@@ -2,7 +2,8 @@
 
 import { mix } from '../../../core/color';
 import { monthYearFr } from '../../../core/text';
-import type { Density, Orientation, Product } from '../../../core/types';
+import type { Product } from '../../../core/types';
+import { TEMPLATE_META } from '../meta';
 import { measureText, pdfText } from '../../measure';
 import {
   availabilityBadge,
@@ -24,16 +25,12 @@ import {
   whatsappButton,
   type TextStyle,
 } from '../kit';
-import type { Box, DrawOp, GridSpec, LayoutInput, LayoutPage, LayoutResult, TemplateDefinition } from '../types';
+import type { Box, DrawOp, LayoutInput, LayoutPage, LayoutResult, TemplateDefinition } from '../types';
 
 const INK = '#2A1F2D';
 const MUTED = '#6F6475';
 
-function grid(orientation: Orientation, density: Density): GridSpec {
-  return orientation === 'portrait'
-    ? pick(density, { large: { cols: 2, rows: 2 }, medium: { cols: 3, rows: 3 }, small: { cols: 4, rows: 4 } })
-    : pick(density, { large: { cols: 4, rows: 2 }, medium: { cols: 5, rows: 2 }, small: { cols: 6, rows: 3 } });
-}
+const grid = TEMPLATE_META.beauty.grid;
 
 function layout(input: LayoutInput): LayoutResult {
   const { settings, shop } = input;
@@ -262,14 +259,4 @@ function buildCover(
   return { ops };
 }
 
-export const beautyTemplate: TemplateDefinition = {
-  id: 'beauty',
-  name: 'Cosmétiques moderne',
-  tagline: 'Doux, lumineux, tendance',
-  description:
-    'Fond teinté, cartes blanches arrondies et prix en pastille colorée. Parfait pour les cosmétiques, parfums et soins.',
-  recommendedColor: '#C8416F',
-  idealFor: ['Cosmétiques', 'Parfums', 'Soins'],
-  grid,
-  layout,
-};
+export const beautyTemplate: TemplateDefinition = { ...TEMPLATE_META.beauty, layout };

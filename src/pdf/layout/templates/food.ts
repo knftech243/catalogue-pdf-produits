@@ -3,7 +3,8 @@
 
 import { mix } from '../../../core/color';
 import { monthYearFr } from '../../../core/text';
-import type { Density, Orientation, Product } from '../../../core/types';
+import type { Product } from '../../../core/types';
+import { TEMPLATE_META } from '../meta';
 import { measureText, pdfText } from '../../measure';
 import {
   availabilityBadge,
@@ -26,7 +27,7 @@ import {
   whatsappButton,
   type TextStyle,
 } from '../kit';
-import type { Box, DrawOp, GridSpec, LayoutInput, LayoutPage, LayoutResult, TemplateDefinition } from '../types';
+import type { Box, DrawOp, LayoutInput, LayoutPage, LayoutResult, TemplateDefinition } from '../types';
 
 const INK = '#1E1B18';
 const MUTED = '#5F5850';
@@ -34,11 +35,7 @@ const STICKER = '#FFC933';
 const CARD_BG = '#FFFBF5';
 const CARD_LINE = '#EFE6DA';
 
-function grid(orientation: Orientation, density: Density): GridSpec {
-  return orientation === 'portrait'
-    ? pick(density, { large: { cols: 1, rows: 5 }, medium: { cols: 2, rows: 6 }, small: { cols: 2, rows: 8 } })
-    : pick(density, { large: { cols: 2, rows: 3 }, medium: { cols: 2, rows: 4 }, small: { cols: 3, rows: 5 } });
-}
+const grid = TEMPLATE_META.food.grid;
 
 function layout(input: LayoutInput): LayoutResult {
   const { settings, shop } = input;
@@ -261,14 +258,4 @@ function buildCover(
   return { ops };
 }
 
-export const foodTemplate: TemplateDefinition = {
-  id: 'food',
-  name: 'Épicerie et restauration colorée',
-  tagline: 'Gourmand, lisible, coloré',
-  description:
-    'Bandeau de couleur, fiches horizontales et prix sur étiquette jaune. Idéal pour les menus de restaurant, fast-foods et listes de prix d’épicerie.',
-  recommendedColor: '#D2452B',
-  idealFor: ['Restaurants', 'Fast-foods', 'Épiceries'],
-  grid,
-  layout,
-};
+export const foodTemplate: TemplateDefinition = { ...TEMPLATE_META.food, layout };

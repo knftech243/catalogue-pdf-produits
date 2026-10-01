@@ -1,8 +1,8 @@
-import { DemoPreview } from '../components/CatalogPreview';
+import { DemoPages } from '../components/DemoPages';
 import { Icon } from '../components/Icon';
 import type { TemplateId } from '../core/types';
 import type { DemoId } from '../demo/shops';
-import { productsPerPage, TEMPLATES } from '../pdf/layout';
+import { productsPerPage, TEMPLATE_META, TEMPLATE_ORDER } from '../pdf/layout/meta';
 import { Link } from '../router/router';
 
 const DEMO_FOR: Record<TemplateId, DemoId> = {
@@ -50,7 +50,7 @@ export function TemplatesPage() {
       </section>
       <section className="section" style={{ paddingTop: 16 }}>
         <div className="container">
-          {TEMPLATES.map((t) => (
+          {TEMPLATE_ORDER.map((id) => TEMPLATE_META[id]).map((t) => (
             <article key={t.id} className="template-card" aria-labelledby={`tpl-${t.id}`}>
               <div>
                 <h2 id={`tpl-${t.id}`}>{t.name}</h2>
@@ -73,7 +73,7 @@ export function TemplatesPage() {
                   Utiliser ce modèle <Icon name="arrowRight" />
                 </Link>
               </div>
-              <DemoPreview demoId={DEMO_FOR[t.id]} templateId={t.id} pages={[0, 1, 2]} />
+              <DemoPages demoId={DEMO_FOR[t.id]} pages={[1, 2, 3]} />
             </article>
           ))}
         </div>

@@ -1,7 +1,8 @@
 // Modèle 1 — Minimal clair : fond blanc, beaucoup d'air, filets fins, prix en couleur.
 
 import { monthYearFr } from '../../../core/text';
-import type { Density, Orientation, Product } from '../../../core/types';
+import type { Product } from '../../../core/types';
+import { TEMPLATE_META } from '../meta';
 import { measureText, pdfText } from '../../measure';
 import {
   bigTitle,
@@ -24,13 +25,9 @@ import {
   whatsappButton,
   type TextStyle,
 } from '../kit';
-import type { Box, DrawOp, GridSpec, LayoutInput, LayoutPage, LayoutResult, TemplateDefinition } from '../types';
+import type { Box, DrawOp, LayoutInput, LayoutPage, LayoutResult, TemplateDefinition } from '../types';
 
-function grid(orientation: Orientation, density: Density): GridSpec {
-  return orientation === 'portrait'
-    ? pick(density, { large: { cols: 2, rows: 2 }, medium: { cols: 3, rows: 3 }, small: { cols: 4, rows: 4 } })
-    : pick(density, { large: { cols: 4, rows: 2 }, medium: { cols: 5, rows: 2 }, small: { cols: 6, rows: 3 } });
-}
+const grid = TEMPLATE_META.minimal.grid;
 
 function layout(input: LayoutInput): LayoutResult {
   const { settings, shop } = input;
@@ -237,14 +234,4 @@ function coverBottom(
   }
 }
 
-export const minimalTemplate: TemplateDefinition = {
-  id: 'minimal',
-  name: 'Minimal clair',
-  tagline: 'Sobre, aéré, efficace',
-  description:
-    'Fond blanc, filets fins et prix en couleur. Convient à tous les commerces et met les photos en valeur sans distraction.',
-  recommendedColor: '#2447D5',
-  idealFor: ['Accessoires', 'Électronique', 'Tous commerces'],
-  grid,
-  layout,
-};
+export const minimalTemplate: TemplateDefinition = { ...TEMPLATE_META.minimal, layout };

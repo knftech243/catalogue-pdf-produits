@@ -1,8 +1,8 @@
-import { DemoPreview } from '../components/CatalogPreview';
+import { DemoPages } from '../components/DemoPages';
 import { Icon } from '../components/Icon';
 import { CURRENCIES } from '../core/price';
 import { DEMO_SHOPS } from '../demo/shops';
-import { getTemplate } from '../pdf/layout';
+import { TEMPLATE_META } from '../pdf/layout/meta';
 import { Link } from '../router/router';
 
 const DESCRIPTIONS: Record<string, string> = {
@@ -35,7 +35,7 @@ export function ExamplesPage() {
       </section>
 
       {DEMO_SHOPS.map((demo, index) => {
-        const template = getTemplate(demo.settings.templateId);
+        const template = TEMPLATE_META[demo.settings.templateId];
         const currency = CURRENCIES.find((c) => c.code === demo.shop.currency.code);
         return (
           <section key={demo.id} className={`section example-section${index % 2 ? ' alt' : ''}`} aria-labelledby={`ex-${demo.id}`}>
@@ -61,7 +61,7 @@ export function ExamplesPage() {
                   Ouvrir cet exemple dans l’outil <Icon name="arrowRight" />
                 </Link>
               </div>
-              <DemoPreview demoId={demo.id} pages={[0, 1]} className="example-pages" />
+              <DemoPages demoId={demo.id} pages={[1, 2]} className="example-pages" />
             </div>
           </section>
         );

@@ -1,10 +1,10 @@
-import { DemoPreview } from '../components/CatalogPreview';
+import { DemoPages } from '../components/DemoPages';
 import { FaqList } from '../components/FaqList';
 import { Icon, type IconName } from '../components/Icon';
 import { PRIVACY_NOTICE } from '../config/site';
 import { FAQ_ITEMS } from '../content/faq';
 import { DEMO_SHOPS } from '../demo/shops';
-import { getTemplate } from '../pdf/layout';
+import { TEMPLATE_META } from '../pdf/layout/meta';
 import { Link } from '../router/router';
 
 const BENEFITS: { icon: IconName; title: string; text: string; tone?: string }[] = [
@@ -108,10 +108,10 @@ export function HomePage() {
               </div>
             </div>
             <div className="hero-page" aria-hidden="true">
-              <DemoPreview demoId="vetements" pages={[0]} className="hero-page-list" />
+              <DemoPages demoId="vetements" pages={[1]} eager captions={false} />
             </div>
             <div className="hero-page hero-page-2" aria-hidden="true">
-              <DemoPreview demoId="restaurant" pages={[1]} className="hero-page-list" />
+              <DemoPages demoId="restaurant" pages={[2]} eager captions={false} />
             </div>
           </div>
         </div>
@@ -292,9 +292,9 @@ export function HomePage() {
           <div className="showcase">
             {DEMO_SHOPS.map((demo) => (
               <Link key={demo.id} to="/exemples" className="showcase-item" aria-label={`Voir l’exemple ${demo.label}`}>
-                <DemoPreview demoId={demo.id} pages={[0]} />
+                <DemoPages demoId={demo.id} pages={[1]} captions={false} />
                 <h3>{demo.label}</h3>
-                <p>Modèle {getTemplate(demo.settings.templateId).name}</p>
+                <p>Modèle {TEMPLATE_META[demo.settings.templateId].name}</p>
               </Link>
             ))}
           </div>

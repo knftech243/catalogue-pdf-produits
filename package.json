@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
+    "build": "tsc -b && node scripts/generate-previews.mjs && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "preview": "vite preview --port 4173",
+    "previews": "node scripts/generate-previews.mjs",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -16,7 +17,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "fonts:metrics": "node scripts/generate-font-metrics.mjs",
-    "demo:pdf": "node scripts/generate-marketing-assets.mjs"
+    "demo:pdf": "node scripts/generate-marketing-assets.mjs",
+    "brand:assets": "node scripts/generate-brand-assets.mjs"
   },
   "engines": {
     "node": ">=20"

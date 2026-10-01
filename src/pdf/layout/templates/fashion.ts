@@ -2,7 +2,8 @@
 
 import { mix } from '../../../core/color';
 import { monthYearFr } from '../../../core/text';
-import type { Density, Orientation, Product } from '../../../core/types';
+import type { Product } from '../../../core/types';
+import { TEMPLATE_META } from '../meta';
 import { measureText, pdfText } from '../../measure';
 import {
   bigTitle,
@@ -23,18 +24,14 @@ import {
   whatsappButton,
   type TextStyle,
 } from '../kit';
-import type { Box, DrawOp, GridSpec, LayoutInput, LayoutPage, LayoutResult, TemplateDefinition } from '../types';
+import type { Box, DrawOp, LayoutInput, LayoutPage, LayoutResult, TemplateDefinition } from '../types';
 
 const CREAM = '#FAF6F0';
 const INK = '#1C1814';
 const MUTED = '#6E655C';
 const PHOTO_BG = '#EFE8DE';
 
-function grid(orientation: Orientation, density: Density): GridSpec {
-  return orientation === 'portrait'
-    ? pick(density, { large: { cols: 2, rows: 2 }, medium: { cols: 3, rows: 2 }, small: { cols: 4, rows: 3 } })
-    : pick(density, { large: { cols: 3, rows: 1 }, medium: { cols: 4, rows: 2 }, small: { cols: 6, rows: 2 } });
-}
+const grid = TEMPLATE_META.fashion.grid;
 
 const upper = (t: string) => t.toLocaleUpperCase('fr-FR');
 
@@ -231,14 +228,4 @@ function buildCover(
   return { ops };
 }
 
-export const fashionTemplate: TemplateDefinition = {
-  id: 'fashion',
-  name: 'Mode élégante',
-  tagline: 'Chic, raffiné, magazine',
-  description:
-    'Fond crème, lettres à empattements et grandes photos verticales, comme un magazine de mode. Idéal pour les vêtements, chaussures et bijoux.',
-  recommendedColor: '#9C6B3C',
-  idealFor: ['Vêtements', 'Chaussures', 'Bijoux'],
-  grid,
-  layout,
-};
+export const fashionTemplate: TemplateDefinition = { ...TEMPLATE_META.fashion, layout };
