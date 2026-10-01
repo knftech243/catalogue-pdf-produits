@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="g" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#FBF0E5"/><stop offset="1" stop-color="#F8E4D0"/></radialGradient></defs><rect width="400" height="400" fill="url(#g)"/><ellipse cx="200" cy="346" rx="130" ry="16" fill="#CBBBAB" opacity="0.35"/>
+    <path d="M100 196 Q104 110 200 108 Q296 110 300 196 Z" fill="#E4A146"/>
+    <g fill="#FFF3D6"><ellipse cx="160" cy="150" rx="6" ry="4"/><ellipse cx="200" cy="134" rx="6" ry="4"/><ellipse cx="240" cy="150" rx="6" ry="4"/><ellipse cx="182" cy="168" rx="6" ry="4"/><ellipse cx="222" cy="170" rx="6" ry="4"/></g>
+    <path d="M92 204 Q110 190 128 204 Q146 218 164 204 Q182 190 200 204 Q218 218 236 204 Q254 190 272 204 Q290 218 308 204 L308 214 L92 214 Z" fill="#4FA83D"/>
+    <path d="M96 214 L304 214 L280 242 L246 222 L120 222 Z" fill="#F5B82E"/>
+    <rect x="96" y="220" width="208" height="38" rx="18" fill="#5A2F18"/>
+    <path d="M100 262 L300 262 Q300 300 262 300 L138 300 Q100 300 100 262 Z" fill="#E4A146"/></svg>

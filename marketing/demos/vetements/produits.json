@@ -1,0 +1,140 @@
+{
+  "boutique": {
+    "name": "Kiese Mode",
+    "slogan": "Le style qui vous ressemble, à prix doux",
+    "owner": "Grâce M.",
+    "whatsapp": "+243 00 000 0001",
+    "phone": "",
+    "email": "kiese.mode@example.com",
+    "address": "Kinshasa, Gombe",
+    "instagram": "",
+    "facebook": "",
+    "currency": {
+      "code": "USD",
+      "customSymbol": "",
+      "customPosition": "after"
+    },
+    "primaryColor": "#9C6B3C",
+    "logoId": null
+  },
+  "modele": "fashion",
+  "produits": [
+    {
+      "nom": "Robe wax longue",
+      "prix": 35,
+      "ancienPrix": null,
+      "description": "Coupe évasée, tissu wax 100 % coton. Tailles S à XXL.",
+      "categorie": "Robes",
+      "reference": "RB-01",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "T-shirt coton bio",
+      "prix": 12,
+      "ancienPrix": 15,
+      "description": "Col rond, coton doux et respirant. Plusieurs couleurs.",
+      "categorie": "Hauts",
+      "reference": "TS-04",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Baskets urbaines",
+      "prix": 45,
+      "ancienPrix": 55,
+      "description": "Semelle confortable, idéales pour la ville. Pointures 38 à 45.",
+      "categorie": "Chaussures",
+      "reference": "BK-12",
+      "disponibilite": "limited"
+    },
+    {
+      "nom": "Sac à main en cuir",
+      "prix": 38,
+      "ancienPrix": null,
+      "description": "Cuir véritable, fermeture aimantée, poche intérieure.",
+      "categorie": "Accessoires",
+      "reference": "SC-07",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Robe de soirée satinée",
+      "prix": 49,
+      "ancienPrix": null,
+      "description": "Satin fluide, dos décolleté. Idéale pour les cérémonies.",
+      "categorie": "Robes",
+      "reference": "RB-09",
+      "disponibilite": "on_order"
+    },
+    {
+      "nom": "Chemise en lin",
+      "prix": 22,
+      "ancienPrix": null,
+      "description": "Lin léger, parfait pour la chaleur. Manches longues.",
+      "categorie": "Hauts",
+      "reference": "CH-02",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Casquette brodée",
+      "prix": 10,
+      "ancienPrix": null,
+      "description": "Réglable, broderie ton sur ton.",
+      "categorie": "Accessoires",
+      "reference": "CP-03",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Montre classique",
+      "prix": 29.9,
+      "ancienPrix": null,
+      "description": "Bracelet cuir, cadran doré, résistante aux éclaboussures.",
+      "categorie": "Accessoires",
+      "reference": "MT-05",
+      "disponibilite": "limited"
+    },
+    {
+      "nom": "T-shirt imprimé wax",
+      "prix": 14,
+      "ancienPrix": null,
+      "description": "Motif wax exclusif sur la poitrine. Unisexe.",
+      "categorie": "Hauts",
+      "reference": "TS-08",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Baskets en toile",
+      "prix": 25,
+      "ancienPrix": null,
+      "description": "Légères et faciles à assortir. Pointures 36 à 44.",
+      "categorie": "Chaussures",
+      "reference": "BK-15",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Pochette de soirée",
+      "prix": 18,
+      "ancienPrix": null,
+      "description": "Petite pochette à chaîne dorée amovible.",
+      "categorie": "Accessoires",
+      "reference": "SC-11",
+      "disponibilite": "sold_out"
+    },
+    {
+      "nom": "Ensemble pagne enfant",
+      "prix": 20,
+      "ancienPrix": null,
+      "description": "Haut + jupe assortis, de 2 à 10 ans.",
+      "categorie": "Enfants",
+      "reference": "EF-01",
+      "disponibilite": "on_order"
+    },
+    {
+      "nom": "Casquette unie",
+      "prix": 8,
+      "ancienPrix": null,
+      "description": "Coton épais, visière incurvée.",
+      "categorie": "Accessoires",
+      "reference": "CP-06",
+      "disponibilite": "in_stock"
+    }
+  ]
+}

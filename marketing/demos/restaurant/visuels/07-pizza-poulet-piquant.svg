@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="g" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#FCEFEB"/><stop offset="1" stop-color="#F9E2DA"/></radialGradient></defs><rect width="400" height="400" fill="url(#g)"/><ellipse cx="200" cy="346" rx="130" ry="16" fill="#CCB9B3" opacity="0.35"/>
+    <circle cx="200" cy="206" r="128" fill="#E3AA59"/>
+    <circle cx="200" cy="206" r="108" fill="#C9362A"/>
+    <g fill="#F7D774"><circle cx="160" cy="170" r="22"/><circle cx="238" cy="186" r="24"/><circle cx="196" cy="248" r="26"/><circle cx="252" cy="250" r="16"/><circle cx="140" cy="234" r="16"/></g>
+    <g fill="#8E2A1E"><circle cx="196" cy="160" r="14"/><circle cx="148" cy="206" r="13"/><circle cx="240" cy="226" r="13"/><circle cx="214" cy="286" r="12"/><circle cx="264" cy="164" r="11"/></g>
+    <path d="M200 98 L200 314 M108 150 L292 262 M108 262 L292 150" stroke="#C98B3D" stroke-width="4" opacity="0.55"/></svg>

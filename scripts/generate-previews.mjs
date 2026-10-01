@@ -13,7 +13,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const out = join(root, 'public', 'apercus');
 mkdirSync(out, { recursive: true });
 
-const vite = await createServer({ root, logLevel: 'error', server: { middlewareMode: true }, appType: 'custom' });
+const vite = await createServer({ root, logLevel: 'error', server: { middlewareMode: true, watch: null }, appType: 'custom' });
 try {
   const { renderDemoPageSvg } = await vite.ssrLoadModule('/src/demo/renderDemoPage.tsx');
   const demos = ['vetements', 'cosmetiques', 'restaurant', 'epicerie'];

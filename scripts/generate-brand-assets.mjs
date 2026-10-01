@@ -14,7 +14,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const mark = readFileSync(join(root, 'branding', 'logo-mark.svg'), 'utf8');
 
 // Rendu serveur des vraies pages de démonstration (même moteur que le PDF).
-const vite = await createServer({ root, logLevel: 'error', server: { middlewareMode: true }, appType: 'custom' });
+const vite = await createServer({ root, logLevel: 'error', server: { middlewareMode: true, watch: null }, appType: 'custom' });
 const { renderDemoPageSvg } = await vite.ssrLoadModule('/src/demo/renderDemoPage.tsx');
 const page = (demoId, index) => renderDemoPageSvg(demoId, index);
 const coverFashion = page('vetements', 0);

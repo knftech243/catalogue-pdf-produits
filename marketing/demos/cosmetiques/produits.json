@@ -1,0 +1,140 @@
+{
+  "boutique": {
+    "name": "Éclat Naturel",
+    "slogan": "Des soins naturels pour une peau qui rayonne",
+    "owner": "Awa K.",
+    "whatsapp": "+225 00 00 00 00 02",
+    "phone": "",
+    "email": "eclat.naturel@example.com",
+    "address": "Abidjan, Cocody",
+    "instagram": "",
+    "facebook": "",
+    "currency": {
+      "code": "FCFA",
+      "customSymbol": "",
+      "customPosition": "after"
+    },
+    "primaryColor": "#C8416F",
+    "logoId": null
+  },
+  "modele": "beauty",
+  "produits": [
+    {
+      "nom": "Beurre de karité pur",
+      "prix": 4000,
+      "ancienPrix": 5000,
+      "description": "Karité brut non raffiné. Nourrit la peau et les cheveux.",
+      "categorie": "Corps",
+      "reference": "KA-250",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Rouge à lèvres mat",
+      "prix": 3500,
+      "ancienPrix": null,
+      "description": "Tenue longue durée, texture confortable. 8 teintes.",
+      "categorie": "Maquillage",
+      "reference": "RL-01",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Lait hydratant corps",
+      "prix": 6500,
+      "ancienPrix": null,
+      "description": "Au beurre de cacao. Pénètre vite, ne colle pas. 400 ml.",
+      "categorie": "Corps",
+      "reference": "LH-400",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Parfum « Nuit dorée » 50 ml",
+      "prix": 15000,
+      "ancienPrix": null,
+      "description": "Notes de vanille, d'ambre et de fleur d'oranger.",
+      "categorie": "Parfums",
+      "reference": "PF-50",
+      "disponibilite": "limited"
+    },
+    {
+      "nom": "Sérum éclat vitamine C",
+      "prix": 9000,
+      "ancienPrix": null,
+      "description": "Unifie le teint et estompe les taches. 30 ml.",
+      "categorie": "Visage",
+      "reference": "SE-30",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Crème mains au karité",
+      "prix": 2500,
+      "ancienPrix": null,
+      "description": "Répare les mains sèches. Format pratique 75 ml.",
+      "categorie": "Corps",
+      "reference": "CM-75",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Huile de coco vierge",
+      "prix": 3000,
+      "ancienPrix": null,
+      "description": "Pressée à froid. Cheveux, peau et massage.",
+      "categorie": "Cheveux",
+      "reference": "HC-100",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Gloss brillant",
+      "prix": 3000,
+      "ancienPrix": null,
+      "description": "Effet repulpant et brillance miroir.",
+      "categorie": "Maquillage",
+      "reference": "GL-02",
+      "disponibilite": "limited"
+    },
+    {
+      "nom": "Masque à l'argile",
+      "prix": 5500,
+      "ancienPrix": null,
+      "description": "Purifie et resserre les pores. 1 à 2 fois par semaine.",
+      "categorie": "Visage",
+      "reference": "MA-150",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Savon noir africain",
+      "prix": 1500,
+      "ancienPrix": null,
+      "description": "Nettoie en douceur, convient aux peaux sensibles.",
+      "categorie": "Corps",
+      "reference": "SN-01",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Eau de toilette fraîche",
+      "prix": 12000,
+      "ancienPrix": null,
+      "description": "Agrumes et thé vert, légère et pétillante. 100 ml.",
+      "categorie": "Parfums",
+      "reference": "ET-100",
+      "disponibilite": "on_order"
+    },
+    {
+      "nom": "Gel douche coco",
+      "prix": 4500,
+      "ancienPrix": null,
+      "description": "Mousse douce au parfum gourmand. 500 ml.",
+      "categorie": "Corps",
+      "reference": "GD-500",
+      "disponibilite": "sold_out"
+    },
+    {
+      "nom": "Crème solaire SPF 50",
+      "prix": 8000,
+      "ancienPrix": null,
+      "description": "Haute protection, sans traces blanches.",
+      "categorie": "Visage",
+      "reference": "CS-50",
+      "disponibilite": "in_stock"
+    }
+  ]
+}

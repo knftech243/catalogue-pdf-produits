@@ -1,0 +1,149 @@
+{
+  "boutique": {
+    "name": "Épicerie Saveurs d'Afrique",
+    "slogan": "Les produits du pays, près de chez vous",
+    "owner": "Joseph N.",
+    "whatsapp": "+32 000 00 00 05",
+    "phone": "",
+    "email": "saveurs.afrique@example.com",
+    "address": "Bruxelles, quartier Matonge",
+    "instagram": "",
+    "facebook": "",
+    "currency": {
+      "code": "EUR",
+      "customSymbol": "",
+      "customPosition": "after"
+    },
+    "primaryColor": "#1F8A4C",
+    "logoId": null
+  },
+  "modele": "minimal",
+  "produits": [
+    {
+      "nom": "Riz parfumé 5 kg",
+      "prix": 11.9,
+      "ancienPrix": null,
+      "description": "Riz long grain au parfum délicat.",
+      "categorie": "Épicerie salée",
+      "reference": "RZ-5",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Huile de palme 1 L",
+      "prix": 5.5,
+      "ancienPrix": null,
+      "description": "Huile rouge traditionnelle, idéale pour la moambe.",
+      "categorie": "Huiles",
+      "reference": "HP-1",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Concentré de tomate",
+      "prix": 1.2,
+      "ancienPrix": null,
+      "description": "Boîte de 400 g, double concentré.",
+      "categorie": "Conserves",
+      "reference": "CT-400",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Gari (semoule de manioc) 1 kg",
+      "prix": 3.9,
+      "ancienPrix": null,
+      "description": "Gari blanc fin, à préparer en quelques minutes.",
+      "categorie": "Épicerie salée",
+      "reference": "GA-1",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Farine de fufu 1 kg",
+      "prix": 4.5,
+      "ancienPrix": null,
+      "description": "Farine de manioc pour un fufu lisse et ferme.",
+      "categorie": "Épicerie salée",
+      "reference": "FF-1",
+      "disponibilite": "limited"
+    },
+    {
+      "nom": "Lait en poudre 400 g",
+      "prix": 6.9,
+      "ancienPrix": 7.5,
+      "description": "Lait entier en poudre, boîte refermable.",
+      "categorie": "Petit-déjeuner",
+      "reference": "LP-400",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Sardines à l'huile",
+      "prix": 2.2,
+      "ancienPrix": null,
+      "description": "Sardines entières, huile végétale. 125 g.",
+      "categorie": "Conserves",
+      "reference": "SD-125",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Sucre en morceaux 1 kg",
+      "prix": 1.8,
+      "ancienPrix": null,
+      "description": "Sucre blanc de canne en morceaux.",
+      "categorie": "Petit-déjeuner",
+      "reference": "SU-1",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Huile d'arachide 1 L",
+      "prix": 4.9,
+      "ancienPrix": null,
+      "description": "Pour les fritures et les sauces.",
+      "categorie": "Huiles",
+      "reference": "HA-1",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Bananes plantains (le kg)",
+      "prix": 2.99,
+      "ancienPrix": null,
+      "description": "Plantains mûrs à point, arrivage chaque semaine.",
+      "categorie": "Fruits et légumes",
+      "reference": "PL-KG",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Lait concentré sucré",
+      "prix": 1.6,
+      "ancienPrix": null,
+      "description": "Boîte de 397 g.",
+      "categorie": "Petit-déjeuner",
+      "reference": "LC-397",
+      "disponibilite": "sold_out"
+    },
+    {
+      "nom": "Jus de bissap 1 L",
+      "prix": 3.5,
+      "ancienPrix": null,
+      "description": "Prêt à boire, peu sucré.",
+      "categorie": "Boissons",
+      "reference": "JB-1",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Piments frais (250 g)",
+      "prix": 1.99,
+      "ancienPrix": null,
+      "description": "Piments rouges, très parfumés.",
+      "categorie": "Fruits et légumes",
+      "reference": "PI-250",
+      "disponibilite": "limited"
+    },
+    {
+      "nom": "Café moulu 250 g",
+      "prix": 4.2,
+      "ancienPrix": null,
+      "description": "Café arabica torréfié, mouture moyenne.",
+      "categorie": "Petit-déjeuner",
+      "reference": "CF-250",
+      "disponibilite": "on_order"
+    }
+  ]
+}

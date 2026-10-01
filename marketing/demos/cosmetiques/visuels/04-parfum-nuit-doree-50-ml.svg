@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="g" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#F9F5EC"/><stop offset="1" stop-color="#F4ECDD"/></radialGradient></defs><rect width="400" height="400" fill="url(#g)"/><ellipse cx="200" cy="346" rx="130" ry="16" fill="#C8C2B5" opacity="0.35"/>
+    <rect x="176" y="86" width="48" height="44" rx="6" fill="#3B2A20"/>
+    <rect x="188" y="126" width="24" height="22" fill="#2F221A"/>
+    <rect x="118" y="146" width="164" height="182" rx="28" fill="#EED6AA" opacity="0.95"/>
+    <rect x="130" y="186" width="140" height="130" rx="20" fill="#D9A441"/>
+    <rect x="156" y="226" width="88" height="40" rx="6" fill="#FFFFFF" opacity="0.85"/>
+    <path d="M136 162 L136 300" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" opacity="0.5"/></svg>

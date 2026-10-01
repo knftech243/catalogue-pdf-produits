@@ -1,0 +1,140 @@
+{
+  "boutique": {
+    "name": "Chez Maman Mado",
+    "slogan": "La cuisine de chez nous, préparée chaque jour",
+    "owner": "Madeleine T.",
+    "whatsapp": "+243 00 000 0003",
+    "phone": "+243 00 000 0004",
+    "email": "maman.mado@example.com",
+    "address": "Kinshasa, Limete — Livraison possible",
+    "instagram": "",
+    "facebook": "",
+    "currency": {
+      "code": "CDF",
+      "customSymbol": "",
+      "customPosition": "after"
+    },
+    "primaryColor": "#D2452B",
+    "logoId": null
+  },
+  "modele": "food",
+  "produits": [
+    {
+      "nom": "Poulet braisé et frites",
+      "prix": 25000,
+      "ancienPrix": null,
+      "description": "Demi-poulet mariné, braisé au feu de bois, frites maison.",
+      "categorie": "Plats",
+      "reference": "",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Liboke de poisson",
+      "prix": 28000,
+      "ancienPrix": null,
+      "description": "Poisson cuit en feuilles de bananier, épices maison.",
+      "categorie": "Plats",
+      "reference": "",
+      "disponibilite": "limited"
+    },
+    {
+      "nom": "Fumbwa et chikwangue",
+      "prix": 20000,
+      "ancienPrix": null,
+      "description": "Feuilles de fumbwa à la pâte d'arachide.",
+      "categorie": "Plats",
+      "reference": "",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Burger maison",
+      "prix": 18000,
+      "ancienPrix": null,
+      "description": "Steak haché, cheddar, salade, tomate, sauce maison.",
+      "categorie": "Burgers",
+      "reference": "",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Burger double cheese",
+      "prix": 24000,
+      "ancienPrix": 27000,
+      "description": "Deux steaks, double cheddar, oignons caramélisés.",
+      "categorie": "Burgers",
+      "reference": "",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Pizza margherita",
+      "prix": 30000,
+      "ancienPrix": null,
+      "description": "Sauce tomate, mozzarella, basilic. 30 cm.",
+      "categorie": "Pizzas",
+      "reference": "",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Pizza poulet piquant",
+      "prix": 35000,
+      "ancienPrix": null,
+      "description": "Poulet mariné, piment doux, oignons rouges. 30 cm.",
+      "categorie": "Pizzas",
+      "reference": "",
+      "disponibilite": "on_order"
+    },
+    {
+      "nom": "Brochettes de bœuf (5)",
+      "prix": 15000,
+      "ancienPrix": null,
+      "description": "Bœuf mariné, poivrons, sauce pili-pili à part.",
+      "categorie": "Grillades",
+      "reference": "",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Brochettes de poulet (5)",
+      "prix": 12000,
+      "ancienPrix": null,
+      "description": "Poulet citronné, légumes grillés.",
+      "categorie": "Grillades",
+      "reference": "",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Frites maison",
+      "prix": 6000,
+      "ancienPrix": null,
+      "description": "Pommes de terre fraîches, coupées à la main.",
+      "categorie": "Accompagnements",
+      "reference": "",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Jus de gingembre",
+      "prix": 4000,
+      "ancienPrix": null,
+      "description": "Gingembre frais, citron, un peu de miel. 50 cl.",
+      "categorie": "Boissons",
+      "reference": "",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Bissap glacé",
+      "prix": 3500,
+      "ancienPrix": null,
+      "description": "Fleurs d'hibiscus infusées, servi très frais. 50 cl.",
+      "categorie": "Boissons",
+      "reference": "",
+      "disponibilite": "in_stock"
+    },
+    {
+      "nom": "Cocktail de fruits",
+      "prix": 6000,
+      "ancienPrix": null,
+      "description": "Mangue, ananas et passion, sans sucre ajouté.",
+      "categorie": "Boissons",
+      "reference": "",
+      "disponibilite": "sold_out"
+    }
+  ]
+}
