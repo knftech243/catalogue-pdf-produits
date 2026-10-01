@@ -120,3 +120,34 @@ la raison. Les décisions marquées **[À valider]** sont reprises dans
   (section 14) de pousser le code sur `https://github.com/knftech243/catalogue-pdf-produits.git`.
   La demande de la section 14 est considérée comme l'autorisation explicite : le dépôt existant
   (vide) est utilisé comme `origin`, **aucun dépôt n'est créé**.
+
+## D19 — Aperçus du site en SVG statiques (performance)
+- **Contexte** : afficher les aperçus de catalogues sur l'accueil obligeait à charger tout le moteur de
+  mise en page (+21 Ko gzip sur chaque page).
+- **Choix** : les aperçus sont générés au build (`scripts/generate-previews.mjs`) en fichiers SVG
+  (`public/apercus/`), chargés en différé. Le moteur n'est plus chargé que dans l'outil.
+
+## D20 — Hydratation conditionnelle (`data-route`)
+- Le HTML pré-rendu porte l'adresse pour laquelle il a été produit. Si un hébergeur sert une autre page
+  (redirection générique vers `index.html`), le navigateur reconstruit la bonne page au lieu de
+  l'hydrater : pas d'erreur, même avec un hébergement mal configuré.
+- L'outil de création n'est jamais rendu au pré-rendu (écran de chargement identique côté serveur et
+  navigateur) : supprime l'erreur React #419.
+
+## D21 — Sauvegarde immédiate quand la page est masquée
+- Défaut trouvé en test : une saisie faite moins de 0,4 s avant un rechargement était perdue.
+- La sauvegarde automatique est forcée sur `pagehide` et `visibilitychange` (changement d'application
+  sur Android, fermeture d'onglet).
+
+## D22 — Orange foncé pour le texte
+- L'orange de marque `#FF7A1A` en texte n'atteint que 2,6:1 de contraste. Tout texte orange utilise
+  `#C2410C` (≈ 5:1). L'orange vif reste pour les aplats (boutons, pictogramme) et les fichiers du logo.
+
+## D23 — Audit d'accessibilité automatisé (axe-core)
+- `@axe-core/playwright` (dépendance de développement) audite le site et l'outil à chaque exécution des
+  tests navigateur (WCAG 2.1 A/AA). Seuil : 0 violation.
+
+## D24 — Règles ESLint `react-hooks` 7 respectées
+- Les mises à jour d'état dans des effets ont été remplacées par des valeurs dérivées (filtre de
+  catégorie, statut d'export, statut de sauvegarde) ou par une recréation du composant (`key`) pour la
+  fenêtre produit. Une seule exception documentée : la lecture unique du paramètre `?exemple=`.

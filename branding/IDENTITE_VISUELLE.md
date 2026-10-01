@@ -38,6 +38,7 @@ un fond orange.
 
 | Nom | Hex | Usage |
 |---|---|---|
+| Mangue foncé (texte) | `#C2410C` | Tout **texte** orange sur fond clair (« Express » du logotype dans le site, grands chiffres) : contraste ≈ 5:1 |
 | Sable | `#F7ECDF` | Sections alternées, puces |
 | Indigo | `#3B3FD8` | Liens, anneau de focus clavier |
 | Menthe foncée | `#047857` | Succès, confidentialité (texte) |
@@ -51,6 +52,9 @@ un fond orange.
 - Encre sur Mangue (bouton principal) : ≈ 6,2:1 (AA). **Le texte des boutons orange est toujours foncé,
   jamais blanc** (le blanc sur orange ne passe pas le seuil AA).
 - Indigo sur blanc : ≈ 7,3:1. Gris texte sur blanc : ≈ 6,6:1. Menthe foncée sur blanc : ≈ 5,5:1.
+- **Mangue vif `#FF7A1A` en texte sur fond clair : ≈ 2,6:1 — interdit.** Utiliser Mangue foncé
+  `#C2410C`. (Les fichiers SVG du logo gardent l'orange vif : un logo est exempté des exigences de
+  contraste, mais le site utilise la version foncée pour rester lisible par tous.)
 
 ## 4. Typographie
 
