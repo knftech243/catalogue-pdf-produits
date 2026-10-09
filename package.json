@@ -21,7 +21,7 @@
     "brand:assets": "node scripts/generate-brand-assets.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": "24.x"
   },
   "dependencies": {
     "jspdf": "^4.2.1",

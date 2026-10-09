@@ -3,9 +3,10 @@
 import { StrictMode } from 'react';
 import { renderToString } from 'react-dom/server';
 import { App } from './App';
+import { headerRules, toNetlifyHeaders } from './config/headers';
+import { NOINDEX, SITE } from './config/site';
 import { findRoute, NOT_FOUND_ROUTE, ROUTES } from './routes';
 import { renderHeadTags } from './seo/head';
-import { SITE } from './config/site';
 
 export function render(path: string): { html: string; head: string } {
   const route = findRoute(path) ?? NOT_FOUND_ROUTE;
@@ -19,3 +20,7 @@ export function render(path: string): { html: string; head: string } {
 
 export const routes = ROUTES;
 export const siteUrl = SITE.url;
+export const allowIndexing = SITE.allowIndexing;
+export const noindexValue = NOINDEX;
+/** Contenu de dist/_headers (Netlify), calculé avec les mêmes réglages que les pages. */
+export const netlifyHeaders = toNetlifyHeaders(headerRules(SITE.allowIndexing));

@@ -1,0 +1,16 @@
+# Netlify — préproduction de Catalogue Express.
+#
+# Les en-têtes HTTP (sécurité, cache, noindex) ne sont PAS déclarés ici : ils sont générés au build
+# dans dist/_headers depuis src/config/headers.ts (une seule méthode, aucun doublon).
+# Aucune redirection : Netlify sert dist/404.html (statut 404) pour les adresses inconnues.
+#
+# Variables à définir dans Netlify (Site configuration > Environment variables) :
+#   VITE_SITE_URL        obligatoire — adresse publique exacte (https://…), sinon le build échoue
+#   VITE_ALLOW_INDEXING  à laisser ABSENTE en préproduction (noindex) ; « true » seulement en production publique
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24"

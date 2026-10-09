@@ -28,19 +28,24 @@
 | Formulaire de contact | Pas d'envoi serveur : ouverture de l'application e-mail. Rappel de ne jamais envoyer de mot de passe ni de données bancaires. |
 | Dépendances | `npm audit` : 0 vulnérabilité connue au moment de l'installation. |
 
-## En-têtes HTTP recommandés (à configurer chez l'hébergeur)
+## En-têtes HTTP (appliqués automatiquement sur Netlify)
+
+Les en-têtes sont définis dans une **source unique**, [`src/config/headers.ts`](src/config/headers.ts),
+et écrits au build dans `dist/_headers` (lu par Netlify). Sur toutes les réponses :
 
 ```
-Content-Security-Policy: default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' mailto:
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
 X-Content-Type-Options: nosniff
 Referrer-Policy: strict-origin-when-cross-origin
-Permissions-Policy: camera=(), microphone=(), geolocation=()
+Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
 Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Robots-Tag: noindex, nofollow        (préproduction uniquement, tant que VITE_ALLOW_INDEXING ≠ true)
 ```
 
 `style-src 'unsafe-inline'` est nécessaire pour les styles dynamiques (couleurs, barres de progression).
-Exemples de configuration : [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md). À tester après déploiement
-(le JSON-LD est un script de type `application/ld+json`, non exécuté).
+Aucun `unsafe-eval`, aucun script externe. Le JSON-LD est un script de type `application/ld+json`,
+non exécuté. Pour un autre hébergeur, reprendre les mêmes valeurs (voir
+[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)).
 
 ## Futur paiement
 

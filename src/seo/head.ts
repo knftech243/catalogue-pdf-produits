@@ -1,9 +1,19 @@
 // Balises <head> propres à chaque page : titre, description, URL canonique, Open Graph.
 // Utilisées au pré-rendu (HTML statique) et lors de la navigation côté navigateur.
 
-import { SITE } from '../config/site';
+import { NOINDEX, SITE } from '../config/site';
 import { FAQ_ITEMS } from '../content/faq';
 import type { RouteDef } from '../routes';
+
+/**
+ * Valeur de la balise robots d'une page, ou null si la page est indexable.
+ * - Indexation non autorisée (préproduction, valeur par défaut) : toutes les pages en noindex.
+ * - Indexation autorisée : seule une page marquée noindex (404) l'est.
+ */
+export function robotsContent(route: RouteDef, allowIndexing: boolean = SITE.allowIndexing) {
+  if (!allowIndexing) return NOINDEX;
+  return route.noindex ? 'noindex, follow' : null;
+}
 
 function escapeHtml(text: string): string {
   return text
@@ -55,12 +65,12 @@ function jsonLd(route: RouteDef): object[] {
 export function renderHeadTags(route: RouteDef): string {
   const url = canonicalUrl(route);
   const image = `${SITE.url}/og-image.png`;
+  const robots = robotsContent(route);
   const tags = [
     `<title>${escapeHtml(route.title)}</title>`,
     `<meta name="description" content="${escapeHtml(route.description)}" />`,
-    route.noindex
-      ? '<meta name="robots" content="noindex, follow" />'
-      : `<link rel="canonical" href="${url}" />`,
+    ...(robots ? [`<meta name="robots" content="${robots}" />`] : []),
+    ...(route.noindex ? [] : [`<link rel="canonical" href="${url}" />`]),
     `<meta property="og:type" content="website" />`,
     `<meta property="og:site_name" content="${SITE.name}" />`,
     `<meta property="og:locale" content="${SITE.locale}" />`,
@@ -100,16 +110,20 @@ export function applyHead(route: RouteDef): void {
   setMeta('meta[property="og:url"]', 'property', 'og:url', canonicalUrl(route));
   let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
   let robots = document.head.querySelector<HTMLMetaElement>('meta[name="robots"]');
-  if (route.noindex) {
-    canonical?.remove();
+  const robotsValue = robotsContent(route);
+  if (robotsValue) {
     if (!robots) {
       robots = document.createElement('meta');
       robots.name = 'robots';
       document.head.appendChild(robots);
     }
-    robots.content = 'noindex, follow';
+    robots.content = robotsValue;
   } else {
     robots?.remove();
+  }
+  if (route.noindex) {
+    canonical?.remove();
+  } else {
     if (!canonical) {
       canonical = document.createElement('link');
       canonical.rel = 'canonical';

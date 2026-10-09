@@ -9,6 +9,7 @@
 2. Créer `.env.production.local` (non versionné) ou renseigner les variables dans l'hébergeur :
    ```
    VITE_SITE_URL=https://www.votre-domaine.com
+   VITE_ALLOW_INDEXING=         (vide en préproduction = noindex ; « true » en production publique)
    VITE_CONTACT_EMAIL=contact@votre-domaine.com
    VITE_SOCIAL_FACEBOOK=        (seulement si le compte existe)
    VITE_SOCIAL_INSTAGRAM=
@@ -57,33 +58,41 @@ Règles de service attendues :
    ```
    Vercel sert automatiquement `404.html` pour les adresses inconnues.
 
-## 3. Netlify
+## 3. Netlify (configuration prête dans le projet)
 
-1. Nouveau site depuis Git (compte créé par le porteur du projet). Build : `npm run build`, publication : `dist`.
-2. Variables d'environnement : *Site configuration → Environment variables*.
-3. Fichier `netlify.toml` conseillé :
-   ```toml
-   [build]
-     command = "npm run build"
-     publish = "dist"
+La configuration est **déjà dans le dépôt** :
 
-   [build.environment]
-     NODE_VERSION = "22"
+| Fichier | Rôle |
+|---|---|
+| [`netlify.toml`](netlify.toml) | Build `npm run build`, publication `dist`, `NODE_VERSION = "24"` — aucun en-tête déclaré ici |
+| [`.nvmrc`](.nvmrc) | Node 24 (lu par Netlify et par nvm en local) |
+| [`src/config/headers.ts`](src/config/headers.ts) | Source unique des en-têtes : sécurité (CSP…), cache, noindex |
+| `dist/_headers` | **Généré au build** par `scripts/prerender.mjs`, lu par Netlify (non versionné) |
 
-   [[headers]]
-     for = "/assets/*"
-     [headers.values]
-       Cache-Control = "public, max-age=31536000, immutable"
+Mise en place (par le porteur du projet, aucun compte n'est créé par l'outil) :
 
-   [[headers]]
-     for = "/*"
-     [headers.values]
-       X-Content-Type-Options = "nosniff"
-       Referrer-Policy = "strict-origin-when-cross-origin"
-       Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-   ```
-   Netlify sert `404.html` avec le statut 404 et `faq/index.html` pour `/faq`. Ne **pas** ajouter de
-   règle `/* /index.html 200` (inutile ici et néfaste pour le SEO).
+1. Nouveau site depuis le dépôt Git : Netlify lit `netlify.toml` automatiquement.
+2. *Site configuration → Environment variables* :
+   - `VITE_SITE_URL` = adresse exacte du site (ex. `https://<nom>.netlify.app`) — **obligatoire** ;
+   - `VITE_ALLOW_INDEXING` : **ne pas la créer** en préproduction ; `true` seulement en production publique ;
+   - `VITE_CONTACT_EMAIL`, `VITE_SOCIAL_*` : facultatives.
+3. Déclencher un déploiement.
+
+Garde-fous du build sur Netlify (le déploiement est refusé, la version précédente reste en ligne) :
+- Node différent de 24 ;
+- `VITE_SITE_URL` absente, non `https://`, avec un chemin, locale, ou contenant `example.com` ;
+- une URL `https://(www.)example.com` restée dans un fichier produit ;
+- une page sans `noindex` alors que l'indexation est interdite.
+
+Vérifications après déploiement :
+- `curl -I https://<site>/` : en-têtes `Content-Security-Policy`, `X-Robots-Tag: noindex, nofollow` (préproduction) ;
+- `curl -I https://<site>/assets/<fichier>.js` : `Cache-Control: public, max-age=31536000, immutable` ;
+- `https://<site>/robots.txt` et `https://<site>/sitemap.xml` : URL du site, pas d'`example.com` ;
+- une adresse inconnue renvoie la page 404 avec le statut 404.
+
+À noter : Netlify redirige `/faq` vers `/faq/` (dossiers `faq/index.html`). Sans effet pour une
+préproduction non indexée ; à traiter avant la production publique si l'on veut des URL canoniques
+sans redirection. Ne **pas** ajouter de règle `/* /index.html 200` (néfaste pour le SEO).
 
 ## 4. Hébergeur statique classique (mutualisé, cPanel, Hostinger…)
 
