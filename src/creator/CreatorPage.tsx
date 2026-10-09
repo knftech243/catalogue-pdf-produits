@@ -39,7 +39,8 @@ function readStep(search: string): number {
 
 function Creator() {
   const { search, navigate } = useRouter();
-  const { data, ready, saveStatus, loadData, reset } = useCreator();
+  const { data, ready, saveStatus, loadData, reset, restoreIssue, dismissRestoreIssue } =
+    useCreator();
   const step = readStep(search);
   const [showErrors, setShowErrors] = useState<Record<number, boolean>>({});
   const [announcement, setAnnouncement] = useState('');
@@ -183,6 +184,26 @@ function Creator() {
             <span className="save-status-more">Données sur cet appareil</span>
           </button>
         </div>
+
+        {restoreIssue && (
+          <div className="notice notice-warning" role="status">
+            <Icon name="alert" />
+            <div>
+              <p>
+                <strong>Votre sauvegarde précédente n’a pas pu être relue.</strong> Un nouveau
+                catalogue vide a été ouvert : vous pouvez continuer normalement.
+              </p>
+              <p>
+                {restoreIssue.backupSaved
+                  ? 'Par précaution, une copie de l’ancienne sauvegarde est gardée sur cet appareil. Rien n’a été envoyé sur Internet.'
+                  : 'L’ancienne sauvegarde reste sur cet appareil tant que vous ne modifiez rien. Rien n’a été envoyé sur Internet.'}
+              </p>
+              <button type="button" className="btn btn-sm" onClick={dismissRestoreIssue}>
+                J’ai compris
+              </button>
+            </div>
+          </div>
+        )}
 
         <nav className="stepper" aria-label="Étapes de création">
           <p className="stepper-mobile" aria-hidden="true">

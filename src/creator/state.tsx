@@ -16,9 +16,9 @@ import type { CatalogData, CatalogSettings, Product, ShopInfo, StoredImage } fro
 import {
   clearAllLocalData,
   deleteImage,
-  loadCatalog,
   loadImages,
   loadPrefs,
+  loadStoredCatalog,
   putImage,
   saveCatalog,
   savePrefs,
@@ -102,9 +102,17 @@ export interface ImageEntry extends StoredImage {
 
 export type SaveStatus = 'idle' | 'saved' | 'disabled' | 'error' | 'unavailable';
 
+/** Sauvegarde précédente illisible : l'outil a démarré avec un catalogue neuf. */
+export interface RestoreIssue {
+  /** Vrai si une copie de l'ancienne sauvegarde est conservée sur l'appareil. */
+  backupSaved: boolean;
+}
+
 interface CreatorContextValue {
   data: CatalogData;
   ready: boolean;
+  restoreIssue: RestoreIssue | null;
+  dismissRestoreIssue: () => void;
   images: Map<string, ImageEntry>;
   prefs: Prefs;
   saveStatus: SaveStatus;
@@ -147,6 +155,7 @@ export function CreatorProvider({ children }: { children: ReactNode }) {
   const [prefs, setPrefs] = useState<Prefs>({ autosave: true });
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const [lastDeleted, setLastDeleted] = useState<{ product: Product; index: number } | null>(null);
+  const [restoreIssue, setRestoreIssue] = useState<RestoreIssue | null>(null);
   // Valeurs à jour pour les rappels et écouteurs d'événements (mises à jour après chaque rendu,
   // avant les autres effets déclarés plus bas).
   const imagesRef = useRef(images);
@@ -157,6 +166,9 @@ export function CreatorProvider({ children }: { children: ReactNode }) {
     prefsRef.current = prefs;
     dataRef.current = data;
   });
+  // Données telles qu'au chargement : elles ne sont réenregistrées qu'après une vraie modification
+  // (une sauvegarde illisible n'est donc jamais écrasée sans action de l'utilisateur).
+  const loadedDataRef = useRef<CatalogData | null>(null);
 
   // Chargement initial des données enregistrées sur l'appareil.
   useEffect(() => {
@@ -164,18 +176,24 @@ export function CreatorProvider({ children }: { children: ReactNode }) {
     (async () => {
       const p = loadPrefs();
       setPrefs(p);
+      let loaded: CatalogData | null = null;
       if (p.autosave) {
-        const saved = loadCatalog();
-        if (saved) {
+        const result = loadStoredCatalog();
+        if (result.status === 'unreadable') {
+          setRestoreIssue({ backupSaved: result.backupSaved });
+        }
+        if (result.data) {
           const stored = await loadImages();
           if (cancelled) return;
           const map = new Map<string, ImageEntry>();
           for (const img of stored) map.set(img.id, toEntry(img));
           setImages(map);
-          dispatch({ type: 'load', data: saved });
+          dispatch({ type: 'load', data: result.data });
+          loaded = result.data;
         }
       }
       if (!cancelled) {
+        loadedDataRef.current = loaded ?? dataRef.current;
         setReady(true);
         setSaveStatus(p.autosave ? 'saved' : 'disabled');
       }
@@ -197,6 +215,8 @@ export function CreatorProvider({ children }: { children: ReactNode }) {
   const dirtyRef = useRef(false);
   useEffect(() => {
     if (!ready || !prefs.autosave) return;
+    // Rien à réenregistrer tant que l'utilisateur n'a rien modifié depuis le chargement.
+    if (data === loadedDataRef.current) return;
     dirtyRef.current = true;
     const timer = window.setTimeout(() => {
       dirtyRef.current = false;
@@ -280,6 +300,7 @@ export function CreatorProvider({ children }: { children: ReactNode }) {
       return map;
     });
     setLastDeleted(null);
+    setRestoreIssue(null);
     dispatch({ type: 'load', data: next });
     if (prefsRef.current.autosave) {
       await clearAllLocalData();
@@ -294,6 +315,7 @@ export function CreatorProvider({ children }: { children: ReactNode }) {
       return new Map();
     });
     setLastDeleted(null);
+    setRestoreIssue(null);
     dispatch({ type: 'reset' });
     await clearAllLocalData();
   }, []);
@@ -351,6 +373,8 @@ export function CreatorProvider({ children }: { children: ReactNode }) {
     () => ({
       data,
       ready,
+      restoreIssue,
+      dismissRestoreIssue: () => setRestoreIssue(null),
       images,
       prefs,
       saveStatus: prefs.autosave ? saveStatus : 'disabled',
@@ -375,6 +399,7 @@ export function CreatorProvider({ children }: { children: ReactNode }) {
     [
       data,
       ready,
+      restoreIssue,
       images,
       prefs,
       saveStatus,

@@ -1,6 +1,8 @@
 // Prépare les données du catalogue pour la mise en page : nettoyage des textes, tri, limites.
 
+import { createDefaultSettings } from '../core/defaults';
 import type { CatalogData, Product, ShopInfo } from '../core/types';
+import { normalizeSettings } from '../core/validate';
 import { sanitizeForPdf } from './measure';
 import type { LayoutInput } from './layout/types';
 
@@ -45,6 +47,9 @@ export interface PreparedInput {
 }
 
 export function prepareLayoutInput(data: CatalogData, options: PrepareOptions): PreparedInput {
+  // Réglages garantis valides pour le moteur, quelle que soit leur origine (sauvegarde locale,
+  // exemple, saisie) : une valeur inconnue ne peut plus produire une grille indéfinie.
+  const settings = normalizeSettings(data.settings);
   let removed = false;
   const clean = (text: string) => {
     const res = sanitizeForPdf(text ?? '');
@@ -70,7 +75,7 @@ export function prepareLayoutInput(data: CatalogData, options: PrepareOptions): 
   };
 
   const complete = data.products.filter(isProductComplete);
-  const sorted = sortProducts(complete, data.settings.sort);
+  const sorted = sortProducts(complete, settings.sort);
   const limited = sorted.slice(0, Math.max(0, options.maxProducts));
   const products = limited.map((p) => ({
     ...p,
@@ -85,8 +90,8 @@ export function prepareLayoutInput(data: CatalogData, options: PrepareOptions): 
       shop,
       products,
       settings: {
-        ...data.settings,
-        coverTitle: cleanLine(data.settings.coverTitle) || 'Catalogue',
+        ...settings,
+        coverTitle: cleanLine(settings.coverTitle) || createDefaultSettings().coverTitle,
       },
       availableImages: options.availableImages,
       watermark: options.watermark,

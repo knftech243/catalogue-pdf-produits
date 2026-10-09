@@ -1,7 +1,15 @@
 // Modèle de données du catalogue. Tout reste dans le navigateur de l'utilisateur.
 
+// Listes des valeurs autorisées : source unique pour les types ET pour la validation des données
+// relues depuis l'appareil (src/core/validate.ts).
+export const SYMBOL_POSITIONS = ['before', 'after'] as const;
+export const ORIENTATIONS = ['portrait', 'landscape'] as const;
+export const DENSITIES = ['large', 'medium', 'small'] as const;
+export const SORT_MODES = ['manual', 'name', 'price-asc', 'price-desc'] as const;
+export const IMAGE_FITS = ['cover', 'contain'] as const;
+
 export type CurrencyCode = 'USD' | 'CDF' | 'EUR' | 'FCFA' | 'CUSTOM';
-export type SymbolPosition = 'before' | 'after';
+export type SymbolPosition = (typeof SYMBOL_POSITIONS)[number];
 
 export interface CurrencySettings {
   code: CurrencyCode;
@@ -43,10 +51,10 @@ export interface Product {
 }
 
 export type TemplateId = 'minimal' | 'fashion' | 'beauty' | 'food';
-export type Orientation = 'portrait' | 'landscape';
-export type Density = 'large' | 'medium' | 'small';
-export type SortMode = 'manual' | 'name' | 'price-asc' | 'price-desc';
-export type ImageFit = 'cover' | 'contain';
+export type Orientation = (typeof ORIENTATIONS)[number];
+export type Density = (typeof DENSITIES)[number];
+export type SortMode = (typeof SORT_MODES)[number];
+export type ImageFit = (typeof IMAGE_FITS)[number];
 
 export interface CatalogSettings {
   templateId: TemplateId;

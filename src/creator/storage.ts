@@ -1,11 +1,13 @@
 // Sauvegarde locale : textes dans localStorage, photos dans IndexedDB.
 // Rien n'est envoyé sur Internet. Tout peut être effacé depuis l'outil.
 
-import { createEmptyCatalog, createDefaultSettings, createEmptyShop } from '../core/defaults';
-import type { CatalogData, Product, StoredImage } from '../core/types';
+import type { CatalogData, StoredImage } from '../core/types';
+import { normalizeCatalog } from '../core/validate';
 
-const CATALOG_KEY = 'catalogue-express:v1:catalog';
-const PREFS_KEY = 'catalogue-express:v1:prefs';
+export const CATALOG_KEY = 'catalogue-express:v1:catalog';
+/** Copie brute d'une sauvegarde illisible, conservée sur l'appareil au lieu d'être perdue. */
+export const CATALOG_BACKUP_KEY = 'catalogue-express:v1:catalog-backup';
+export const PREFS_KEY = 'catalogue-express:v1:prefs';
 const DB_NAME = 'catalogue-express';
 const DB_VERSION = 1;
 const STORE = 'images';
@@ -37,7 +39,11 @@ export function loadPrefs(): Prefs {
   if (!ls) return { ...DEFAULT_PREFS, autosave: false };
   try {
     const raw = ls.getItem(PREFS_KEY);
-    return raw ? { ...DEFAULT_PREFS, ...JSON.parse(raw) } : { ...DEFAULT_PREFS };
+    const parsed: unknown = raw ? JSON.parse(raw) : null;
+    const autosave =
+      parsed && typeof parsed === 'object' && 'autosave' in parsed ? parsed.autosave : undefined;
+    // Seul un vrai booléen est accepté (le texte « false » ne doit pas être compris comme « oui »).
+    return { autosave: typeof autosave === 'boolean' ? autosave : DEFAULT_PREFS.autosave };
   } catch {
     return { ...DEFAULT_PREFS };
   }
@@ -52,56 +58,51 @@ export function savePrefs(prefs: Prefs): void {
   }
 }
 
-/** Vérifie et complète des données relues (anciennes versions, données abîmées). */
-export function sanitizeCatalog(raw: unknown): CatalogData | null {
-  if (!raw || typeof raw !== 'object') return null;
-  const obj = raw as Partial<CatalogData>;
-  if (obj.version !== 1) return null;
-  const base = createEmptyCatalog();
-  const str = (v: unknown) => (typeof v === 'string' ? v : '');
-  const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? v : null);
-  const shop = { ...createEmptyShop(), ...(obj.shop ?? {}) };
-  const products: Product[] = Array.isArray(obj.products)
-    ? obj.products
-        .filter(
-          (p): p is Product =>
-            !!p && typeof p === 'object' && typeof (p as Product).id === 'string',
-        )
-        .map((p) => ({
-          id: p.id,
-          name: str(p.name),
-          price: num(p.price),
-          oldPrice: num(p.oldPrice),
-          description: str(p.description),
-          category: str(p.category),
-          reference: str(p.reference),
-          availability: ['in_stock', 'limited', 'on_order', 'sold_out'].includes(p.availability)
-            ? p.availability
-            : '',
-          imageId: typeof p.imageId === 'string' ? p.imageId : null,
-        }))
-    : [];
-  return {
-    version: 1,
-    shop: {
-      ...shop,
-      currency: { ...base.shop.currency, ...(shop.currency ?? {}) },
-      logoId: typeof shop.logoId === 'string' ? shop.logoId : null,
-    },
-    products,
-    settings: { ...createDefaultSettings(), ...(obj.settings ?? {}) },
-  };
+export type LoadStatus =
+  /** Aucune sauvegarde sur l'appareil. */
+  | 'none'
+  /** Sauvegarde relue ; les champs invalides éventuels ont été remplacés un par un. */
+  | 'ok'
+  /** Sauvegarde présente mais illisible : l'outil repart d'un catalogue neuf. */
+  | 'unreadable';
+
+export interface LoadResult {
+  status: LoadStatus;
+  data: CatalogData | null;
+  /** Vrai si une copie de la sauvegarde illisible a pu être conservée sur l'appareil. */
+  backupSaved: boolean;
 }
 
-export function loadCatalog(): CatalogData | null {
+/**
+ * Relit le catalogue enregistré et le valide champ par champ (src/core/validate.ts).
+ * Une sauvegarde illisible n'est jamais effacée ici : elle est copiée dans une clé de secours
+ * avant d'être remplacée, plus tard, par la sauvegarde automatique.
+ */
+export function loadStoredCatalog(): LoadResult {
   const ls = safeLocalStorage();
-  if (!ls) return null;
+  if (!ls) return { status: 'none', data: null, backupSaved: false };
+  let raw: string | null = null;
   try {
-    const raw = ls.getItem(CATALOG_KEY);
-    return raw ? sanitizeCatalog(JSON.parse(raw)) : null;
+    raw = ls.getItem(CATALOG_KEY);
   } catch {
-    return null;
+    return { status: 'none', data: null, backupSaved: false };
   }
+  if (!raw) return { status: 'none', data: null, backupSaved: false };
+  let data: CatalogData | null = null;
+  try {
+    data = normalizeCatalog(JSON.parse(raw));
+  } catch {
+    data = null;
+  }
+  if (data) return { status: 'ok', data, backupSaved: false };
+  let backupSaved = false;
+  try {
+    ls.setItem(CATALOG_BACKUP_KEY, raw);
+    backupSaved = true;
+  } catch {
+    // Espace insuffisant : la sauvegarde d'origine reste en place jusqu'à la prochaine modification.
+  }
+  return { status: 'unreadable', data: null, backupSaved };
 }
 
 export type SaveResult = 'ok' | 'quota' | 'unavailable';
@@ -193,6 +194,7 @@ export async function clearAllLocalData(): Promise<void> {
   const ls = safeLocalStorage();
   try {
     ls?.removeItem(CATALOG_KEY);
+    ls?.removeItem(CATALOG_BACKUP_KEY);
   } catch {
     // ignoré
   }

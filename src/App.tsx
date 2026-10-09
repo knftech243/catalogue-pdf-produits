@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useSyncExternalStore, type ComponentType } from 'react';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { ContactPage } from './pages/ContactPage';
@@ -92,10 +93,20 @@ function Routes() {
   );
 }
 
+/** ErrorBoundary globale, réinitialisée à chaque changement de page. */
+function SafeRoutes() {
+  const { path } = useRouter();
+  return (
+    <ErrorBoundary resetKey={path}>
+      <Routes />
+    </ErrorBoundary>
+  );
+}
+
 export function App({ url }: { url: string }) {
   return (
     <RouterProvider url={url}>
-      <Routes />
+      <SafeRoutes />
     </RouterProvider>
   );
 }
